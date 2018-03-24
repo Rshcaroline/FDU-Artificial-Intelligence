@@ -1,0 +1,10 @@
+Start A 2
+Start B 1
+A B 1
+A C 3
+A D 1
+B D 5
+B Goal 10
+C Goal 7
+D Goal 4
+END

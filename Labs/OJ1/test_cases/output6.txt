@@ -1,0 +1,1 @@
+Start->S->R->P->B->U->V->I->Goal

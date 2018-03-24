@@ -1,0 +1,17 @@
+Start A 24
+Start B 47
+Start C 71
+A D 120
+A B 25
+B D 88
+B E 55
+B F 66
+B C 23
+C E 31
+C F 42
+E D 31
+E F 74
+D Goal 29
+E Goal 79
+F G 66
+END

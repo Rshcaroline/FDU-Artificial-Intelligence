@@ -1,0 +1,1 @@
+Start->A->D->Goal

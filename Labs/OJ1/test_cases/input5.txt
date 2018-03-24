@@ -1,0 +1,24 @@
+Start Z 75
+Start S 140
+Start T 118
+Z O 71
+O S 151
+S F 99
+S R 80
+T L 111
+L M 70
+M D 75
+D C 120
+R C 146
+R P 97
+C P 138
+P B 101
+F B 211
+B G 90
+B U 85
+U H 98
+H Goal 86
+U V 142
+V I 92
+I N 87
+END
