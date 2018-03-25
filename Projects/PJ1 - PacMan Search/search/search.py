@@ -73,7 +73,12 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 
-def generic_search(problem, fringe, add_to_fringe_fn):
+def genericSearch(problem, fringe, add_to_fringe_fn):
+    """
+    Full-fledged generic search functions to help Pacman plan routes.
+    Each algorithm is very similar. Algorithms for DFS, BFS, UCS, and A*
+    differ only in the details of how the fringe is managed.
+    """
     closed = set()
     start = (problem.getStartState(), 0, [])  # (node, cost, path)
     add_to_fringe_fn(fringe, start, 0)
@@ -110,17 +115,23 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    fringe = util.Stack()
+    fringe = util.Stack()    # use stack data structure provided in util.py, FILO
     def add_to_fringe_fn(fringe, state, cost):
         fringe.push(state)
 
-    return generic_search(problem, fringe, add_to_fringe_fn)
+    return genericSearch(problem, fringe, add_to_fringe_fn)
     # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    fringe = util.Queue()    # FIFO
+    def add_to_fringe_fn(fringe, state, cost):
+        fringe.push(state)
+
+    return genericSearch(problem, fringe, add_to_fringe_fn)
+    # util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
