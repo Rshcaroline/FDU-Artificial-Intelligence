@@ -80,22 +80,22 @@ def genericSearch(problem, fringe, fringeAdd):
     differ only in the details of how the fringe is managed.
     """
     closed = set()      # use set to keep distinct
-    start = (problem.getStartState(), 0, [])  # a tuple with format like : (node, cost, path)
-    fringeAdd(fringe, start, 0)       # fringeAdd(fringe, state, cost)
+    start = (problem.getStartState(), 0, [])  # node is a tuple with format like : (state, cost, path)
+    fringeAdd(fringe, start, 0)       # fringeAdd(fringe, node, cost)
 
     while not fringe.isEmpty():
-        (node, cost, path) = fringe.pop()
+        (state, cost, path) = fringe.pop()
 
-        if problem.isGoalState(node):
+        if problem.isGoalState(state):
             return path
 
-        if not node in closed:
-            closed.add(node)
+        if not state in closed:
+            closed.add(state)
 
-            for childNode, childAction, childCost in problem.getSuccessors(node):
+            for childState, childAction, childCost in problem.getSuccessors(state):
                 newCost = cost + childCost     # Notice! Can't use cost += childCost
                 newPath = path + [childAction]     # Notice! Can't use path.append(childAction)
-                newState = (childNode, newCost, newPath)
+                newState = (childState, newCost, newPath)
                 fringeAdd(fringe, newState, cost)
 
 
@@ -116,8 +116,8 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     fringe = util.Stack()    # use stack data structure provided in util.py, LIFO
-    def fringeAdd(fringe, state, cost):
-        fringe.push(state)
+    def fringeAdd(fringe, node, cost):
+        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
@@ -127,8 +127,8 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     fringe = util.Queue()    # FIFO
-    def fringeAdd(fringe, state, cost):
-        fringe.push(state)
+    def fringeAdd(fringe, node, cost):
+        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
@@ -137,9 +137,9 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
 
-    fringe = util.PriorityQueue()    # Priority Queue
-    def fringeAdd(fringe, state, cost):
-        fringe.push(state, cost)
+    fringe = util.PriorityQueue()    # Priority Queue ordered by cost
+    def fringeAdd(fringe, node, cost):
+        fringe.push(node, cost)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
@@ -152,9 +152,21 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
+    """
+    Search the node that has the lowest combined cost and heuristic first.
+    A* takes a heuristic function as an argument.
+    Heuristics take two arguments: a state in the search problem (the main argument),
+    and the problem itself (for reference information).
+    """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    fringe = util.PriorityQueue()
+    def fringeAdd(fringe, node, cost):  # node is a tuple with format like : (state, cost, path)
+        cost += heuristic(node[0], problem)
+        fringe.push(node, cost)
+
+    return genericSearch(problem, fringe, fringeAdd)
+    # util.raiseNotDefined()
 
 
 # Abbreviations
