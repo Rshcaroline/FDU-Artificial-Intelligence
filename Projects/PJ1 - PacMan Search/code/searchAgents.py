@@ -377,12 +377,20 @@ def cornersHeuristic(state, problem):
 
     "*** YOUR CODE HERE ***"
 
-    # distances = [0]   # make sure never returns a negative value
-    # for corner in state[1]:
-    #     distances.append(util.manhattanDistance(state[0], corner))
-
+    # Method 1: simply use the largest manhattanDistance to unvisitedCorners as heuristic
+    #           uses max to prevent overestimating the cost to reach the goal
+    #           Search nodes expanded: 1136, Score: 434
+    # currentPosition = state[0]
+    # unvisitedCorners = list(state[1])
+    # distances = [0]   # use 0 to make sure never returns a negative value
+    # for corner in unvisitedCorners:
+    #     distances.append(util.manhattanDistance(currentPosition, corner))
+    #
     # return max(distances)
 
+    # Method 2: while unvisitedCorners is not empty, find the nearest corner
+    #           and update heuristic each time untill isGoalState
+    #           Search nodes expanded: 692, Score: 434
     currentPosition = state[0]
     unvisitedCorners = list(state[1])
     heuristic = 0

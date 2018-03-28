@@ -121,7 +121,8 @@ def depthFirstSearch(problem):
 
     fringe = util.Stack()    # use stack data structure provided in util.py, LIFO
     def fringeAdd(fringe, node, cost):
-        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
+        if not node in fringe.list:
+            fringe.push(node)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
@@ -132,7 +133,8 @@ def breadthFirstSearch(problem):
 
     fringe = util.Queue()    # FIFO
     def fringeAdd(fringe, node, cost):
-        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
+        if not node in fringe.list:
+            fringe.push(node)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
