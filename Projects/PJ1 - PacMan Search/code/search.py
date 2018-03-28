@@ -76,8 +76,10 @@ def tinyMazeSearch(problem):
 def genericSearch(problem, fringe, fringeAdd):
     """
     Full-fledged generic search functions to help Pacman plan routes.
-    Each algorithm is very similar. Algorithms for DFS, BFS, UCS, and A*
+    Since each algorithm is very similar. Algorithms for DFS, BFS, UCS, and A*
     differ only in the details of how the fringe is managed.
+    Hence I implemented a single generic method which is configured with
+    an algorithm-specific queuing strategy called fringeAdd.
     """
     closed = set()      # use set to keep distinct
     start = (problem.getStartState(), 0, [])  # node is a tuple with format like : (state, cost, path)
