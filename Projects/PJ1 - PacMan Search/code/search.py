@@ -100,6 +100,8 @@ def genericSearch(problem, fringe, fringeAdd):
                 newState = (childState, newCost, newPath)
                 fringeAdd(fringe, newState, cost)
 
+    return "There is nothing in fringe. Failure!"
+
 
 def depthFirstSearch(problem):
     """
@@ -164,7 +166,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     fringe = util.PriorityQueue()
     def fringeAdd(fringe, node, cost):  # node is a tuple with format like : (state, cost, path)
-        cost += heuristic(node[0], problem)
+        cost += heuristic(node[0], problem)   # f(n) = g(n) + h(n)
         fringe.push(node, cost)
 
     return genericSearch(problem, fringe, fringeAdd)

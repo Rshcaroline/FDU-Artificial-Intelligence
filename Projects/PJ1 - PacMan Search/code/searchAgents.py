@@ -288,6 +288,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.startState = (self.startingPosition, self.corners)
 
     def getStartState(self):
         """
@@ -296,7 +297,7 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
 
-        return (self.startingPosition, self.corners)
+        return self.startState
         # util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -338,8 +339,8 @@ class CornersProblem(search.SearchProblem):
                 # this means if this corner is touched by next move, remove it from the to be touched corner list
                 # print("state[1]:", state[1])
                 # print("(nextx, nexty):", (nextx, nexty))
-                corners = tuple(x for x in state[1] if x != (nextx, nexty))
-                successors.append((((nextx, nexty), corners), action, 1))
+                unvisitedCorners = tuple(x for x in state[1] if x != (nextx, nexty))
+                successors.append((((nextx, nexty), unvisitedCorners), action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -371,16 +372,32 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    corners = problem.corners  # These are the corner coordinates
-    walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
+    # corners = problem.corners  # These are the corner coordinates
+    # walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
 
-    distances = [0]
-    for corner in state[1]:
-        distances.append(util.manhattanDistance(state[0], corner))
+    # distances = [0]   # make sure never returns a negative value
+    # for corner in state[1]:
+    #     distances.append(util.manhattanDistance(state[0], corner))
 
-    return max(distances)
+    # return max(distances)
+
+    currentPosition = state[0]
+    unvisitedCorners = list(state[1])
+    heuristic = 0
+
+    while len(unvisitedCorners):
+        distanceCorner = []
+        for corner in unvisitedCorners:
+            distance = util.manhattanDistance(currentPosition, corner)
+            distanceCorner.append((distance, corner))
+        currentDistance, currentCorner = min(distanceCorner)
+        heuristic += currentDistance
+        currentPosition = currentCorner
+        unvisitedCorners.remove(currentCorner)
+
+    return heuristic
 
     # return 0 # Default to trivial solution
 
