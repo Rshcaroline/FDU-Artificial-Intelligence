@@ -305,6 +305,7 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
 
+        # state has the form like ((x,y),corners to be touched)
         return len(state[1]) == 0
         # util.raiseNotDefined()
 
@@ -334,7 +335,10 @@ class CornersProblem(search.SearchProblem):
             hitsWall = self.walls[nextx][nexty]
 
             if not hitsWall:
-                corners =  tuple(x for x in state[1] if x != (nextx, nexty))
+                # this means if this corner is touched by next move, remove it from the to be touched corner list
+                # print("state[1]:", state[1])
+                # print("(nextx, nexty):", (nextx, nexty))
+                corners = tuple(x for x in state[1] if x != (nextx, nexty))
                 successors.append((((nextx, nexty), corners), action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
@@ -367,11 +371,18 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    corners = problem.corners  # These are the corner coordinates
+    walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+
+    distances = [0]
+    for corner in state[1]:
+        distances.append(util.manhattanDistance(state[0], corner))
+
+    return max(distances)
+
+    # return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
