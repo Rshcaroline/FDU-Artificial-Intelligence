@@ -98,7 +98,7 @@ def genericSearch(problem, fringe, fringeAdd):
                 newCost = cost + childCost     # Notice! Can't use cost += childCost
                 newPath = path + [childAction]     # Notice! Can't use path.append(childAction)
                 newState = (childState, newCost, newPath)
-                fringeAdd(fringe, newState, cost)
+                fringeAdd(fringe, newState, newCost)
 
     return "There is nothing in fringe. Failure!"
 
@@ -121,8 +121,8 @@ def depthFirstSearch(problem):
 
     fringe = util.Stack()    # use stack data structure provided in util.py, LIFO
     def fringeAdd(fringe, node, cost):
-        if not node in fringe.list:
-            fringe.push(node)  # node is a tuple with format like : (state, cost, path)
+        # if not node in fringe.list:
+        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
@@ -133,8 +133,8 @@ def breadthFirstSearch(problem):
 
     fringe = util.Queue()    # FIFO
     def fringeAdd(fringe, node, cost):
-        if not node in fringe.list:
-            fringe.push(node)  # node is a tuple with format like : (state, cost, path)
+        # if not node in fringe.list:
+        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
 
     return genericSearch(problem, fringe, fringeAdd)
     # util.raiseNotDefined()
@@ -168,7 +168,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     fringe = util.PriorityQueue()
     def fringeAdd(fringe, node, cost):  # node is a tuple with format like : (state, cost, path)
-        cost += heuristic(node[0], problem)   # f(n) = g(n) + h(n)
+        cost += heuristic(node[0], problem)   # f(n) = g(n) + h(n), heuristic(state, problem=None)
         fringe.push(node, cost)
 
     return genericSearch(problem, fringe, fringeAdd)

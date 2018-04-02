@@ -379,7 +379,9 @@ def cornersHeuristic(state, problem):
 
     # Method 1: simply use the largest manhattanDistance to unvisitedCorners as heuristic
     #           uses max to prevent overestimating the cost to reach the goal
+    #           return the furthest distance
     #           Search nodes expanded: 1136, Score: 434
+    #
     # currentPosition = state[0]
     # unvisitedCorners = list(state[1])
     # distances = [0]   # use 0 to make sure never returns a negative value
@@ -389,8 +391,9 @@ def cornersHeuristic(state, problem):
     # return max(distances)
 
     # Method 2: while unvisitedCorners is not empty, find the nearest corner
-    #           and update heuristic each time untill isGoalState
+    #           and update heuristic use min each time untill isGoalState
     #           Search nodes expanded: 692, Score: 434
+    #
     currentPosition = state[0]
     unvisitedCorners = list(state[1])
     heuristic = 0
@@ -471,6 +474,19 @@ class AStarFoodSearchAgent(SearchAgent):
         self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
         self.searchType = FoodSearchProblem
 
+class MyPositionSearchProblem(PositionSearchProblem):
+        """
+        Inherit from `PositionSearchProblem`, allowing walls as a parameter.
+        """
+        def __init__(self, start, goal, walls):
+            self.walls = walls
+            self.startState = start
+            self.goal = goal
+            self.costFn = lambda x: 1
+            self.visualize = False
+
+            self._visited, self._visitedlist, self._expanded = {}, [], 0  # DO NOT CHANGE
+
 def foodHeuristic(state, problem):
     """
     Your heuristic for the FoodSearchProblem goes here.
@@ -499,9 +515,74 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
+    # position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+
+    # Method 1: simply use the largest manhattanDistance to foodGrid as heuristic
+    #           uses max to prevent overestimating the cost to reach the goal
+    #           return the furthest distance
+    #           Search nodes expanded: 9551, Score: 570
+    #           Path found with total cost of 60 in 3.9 seconds
+    #
+    position, foodGrid = state
+
+    distances = [0]
+    for food in foodGrid.asList():
+        distances.append(util.manhattanDistance(position, food))
+
+    return max(distances)
+
+    # Method 2: use mazeDistance to foodGrid as heuristic
+    #           Search nodes expanded: 4137, Score: 570
+    #           Path found with total cost of 60 in 2.2 seconds
+    # position, foodGrid = state
+    #
+    # def getMazeDistance(start, end):
+    #     """
+    #     Returns the maze distance between any two points, using the search functions
+    #     you have already built.
+    #     """
+    #     try:
+    #         return problem.heuristicInfo[(start, end)]
+    #     except:
+    #         prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
+    #         problem.heuristicInfo[(start, end)] = len(search.bfs(prob))
+    #         return problem.heuristicInfo[(start, end)]
+    #
+    # foodDistance = [getMazeDistance(position, food) for food in foodGrid.asList()]
+    # heuristic = max(foodDistance) if len(foodDistance) != 0 else 0
+    # return heuristic
+
+    # return 0
+
+    # Method 3:
+    # position, foodGrid = state
+    #
+    # def mazeDistance(point1, point2, gameState):
+    #     """
+    #     Returns the maze distance between any two points, using the search functions
+    #     you have already built. The gameState can be any game state -- Pacman's
+    #     position in that state is ignored.
+    #
+    #     Example usage: mazeDistance( (2,4), (5,6), gameState)
+    #
+    #     This might be a useful helper function for your ApproximateSearchAgent.
+    #     """
+    #     x1, y1 = point1
+    #     x2, y2 = point2
+    #     walls = gameState.getWalls()
+    #     assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
+    #     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
+    #     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
+    #     return len(search.bfs(prob))
+    #
+    # distances = [0]
+    # for food in foodGrid.asList():
+    #     # distances.append(util.manhattanDistance(position, food))
+    #     distances.append(mazeDistance(position, food, problem.startingGameState))
+    #
+    # return max(distances)
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -532,7 +613,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.astar(problem)
+        # util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -568,4 +650,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        x,y = state
+
+        return self.food[x][y]
+        # util.raiseNotDefined()
