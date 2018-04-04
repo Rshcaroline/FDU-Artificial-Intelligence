@@ -73,34 +73,44 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 
-def genericSearch(problem, fringe, fringeAdd):
+def genericSearch(problem, frontier, frontierAdd):
     """
     Full-fledged generic search functions to help Pacman plan routes.
     Since each algorithm is very similar. Algorithms for DFS, BFS, UCS, and A*
-    differ only in the details of how the fringe is managed.
+    differ only in the details of how the frontier is managed.
     Hence I implemented a single generic method which is configured with
-    an algorithm-specific queuing strategy called fringeAdd.
+    an algorithm-specific queuing strategy called frontierAdd.
     """
-    closed = set()      # use set to keep distinct
-    start = (problem.getStartState(), 0, [])  # node is a tuple with format like : (state, cost, path)
-    fringeAdd(fringe, start, 0)       # fringeAdd(fringe, node, cost)
+    # initialize the frontier using the initial state of problem
+    startState = (problem.getStartState(), 0, [])  # node is a tuple with format like : (state, cost, path)
+    frontierAdd(frontier, startState, 0)       # frontierAdd(frontier, node, cost)
 
-    while not fringe.isEmpty():
-        (state, cost, path) = fringe.pop()
+    # initialize the explored set to be empty
+    explored = set()      # use set to keep distinct
 
+    # loop do
+    while not frontier.isEmpty():
+        # choose a leaf node and remove it from the frontier
+        (state, cost, path) = frontier.pop()
+
+        # if the node contains a goal state then return the corresponding solution
         if problem.isGoalState(state):
             return path
 
-        if not state in closed:
-            closed.add(state)
+        # add the node to the explored set
+        if not state in explored:
+            explored.add(state)
 
+            # expand the chosen node, adding the resulting nodes to the frontier
+            # ??? only if not in the frontier or explored set
             for childState, childAction, childCost in problem.getSuccessors(state):
                 newCost = cost + childCost     # Notice! Can't use cost += childCost
                 newPath = path + [childAction]     # Notice! Can't use path.append(childAction)
                 newState = (childState, newCost, newPath)
-                fringeAdd(fringe, newState, newCost)
+                frontierAdd(frontier, newState, newCost)
 
-    return "There is nothing in fringe. Failure!"
+    # if the frontier is empty then return failure
+    return "There is nothing in frontier. Failure!"
 
 
 def depthFirstSearch(problem):
@@ -119,35 +129,35 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    fringe = util.Stack()    # use stack data structure provided in util.py, LIFO
-    def fringeAdd(fringe, node, cost):
-        # if not node in fringe.list:
-        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
+    frontier = util.Stack()    # use stack data structure provided in util.py, LIFO
+    def frontierAdd(frontier, node, cost):
+        # if not node in frontier.list:
+        frontier.push(node)  # node is a tuple with format like : (state, cost, path)
 
-    return genericSearch(problem, fringe, fringeAdd)
+    return genericSearch(problem, frontier, frontierAdd)
     # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
-    fringe = util.Queue()    # FIFO
-    def fringeAdd(fringe, node, cost):
-        # if not node in fringe.list:
-        fringe.push(node)  # node is a tuple with format like : (state, cost, path)
+    frontier = util.Queue()    # FIFO
+    def frontierAdd(frontier, node, cost):
+        # if not node in frontier.list:
+        frontier.push(node)  # node is a tuple with format like : (state, cost, path)
 
-    return genericSearch(problem, fringe, fringeAdd)
+    return genericSearch(problem, frontier, frontierAdd)
     # util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
 
-    fringe = util.PriorityQueue()    # Priority Queue ordered by cost
-    def fringeAdd(fringe, node, cost):
-        fringe.push(node, cost)  # node is a tuple with format like : (state, cost, path)
+    frontier = util.PriorityQueue()    # Priority Queue ordered by cost
+    def frontierAdd(frontier, node, cost):
+        frontier.push(node, cost)  # node is a tuple with format like : (state, cost, path)
 
-    return genericSearch(problem, fringe, fringeAdd)
+    return genericSearch(problem, frontier, frontierAdd)
     # util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -166,12 +176,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """
     "*** YOUR CODE HERE ***"
 
-    fringe = util.PriorityQueue()
-    def fringeAdd(fringe, node, cost):  # node is a tuple with format like : (state, cost, path)
+    frontier = util.PriorityQueue()
+    def frontierAdd(frontier, node, cost):  # node is a tuple with format like : (state, cost, path)
         cost += heuristic(node[0], problem)   # f(n) = g(n) + h(n), heuristic(state, problem=None)
-        fringe.push(node, cost)
+        frontier.push(node, cost)
 
-    return genericSearch(problem, fringe, fringeAdd)
+    return genericSearch(problem, frontier, frontierAdd)
     # util.raiseNotDefined()
 
 

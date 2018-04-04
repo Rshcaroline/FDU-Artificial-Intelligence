@@ -288,6 +288,8 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+
+        # state has the form like ((x,y), corners to be visited)
         self.startState = (self.startingPosition, self.corners)
 
     def getStartState(self):
@@ -306,7 +308,7 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
 
-        # state has the form like ((x,y),corners to be touched)
+        # state has the form like ((x,y), corners to be visited)
         return len(state[1]) == 0
         # util.raiseNotDefined()
 
@@ -330,17 +332,18 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-            x, y = state[0]        # node (x, y)
+
+            x, y = state[0]        # node (x, y) is the currentPosition
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
 
             if not hitsWall:
-                # this means if this corner is touched by next move, remove it from the to be touched corner list
-                # print("state[1]:", state[1])
-                # print("(nextx, nexty):", (nextx, nexty))
+                # this means if this corner is visited by next move
+                # remove it from the to be visited corner list
                 unvisitedCorners = tuple(x for x in state[1] if x != (nextx, nexty))
-                successors.append((((nextx, nexty), unvisitedCorners), action, 1))
+                # return a list of triples: (successor, action, stepCost)
+                successors.append((((nextx, nexty), unvisitedCorners), action, 1))  # a cost of 1
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -613,6 +616,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+
+        # return search.ucs(problem)
         return search.astar(problem)
         # util.raiseNotDefined()
 
@@ -647,10 +652,12 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
-        x,y = state
+        # x,y = state
 
         "*** YOUR CODE HERE ***"
+        # The state is Pacman's position
         x,y = state
 
+        # implement the goal state, self.food[x][y] will return True/False
         return self.food[x][y]
         # util.raiseNotDefined()
