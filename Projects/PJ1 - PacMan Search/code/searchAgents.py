@@ -527,64 +527,53 @@ def foodHeuristic(state, problem):
     #           Search nodes expanded: 9551, Score: 570
     #           Path found with total cost of 60 in 3.9 seconds
     #
-    position, foodGrid = state
-
-    distances = [0]
-    for food in foodGrid.asList():
-        distances.append(util.manhattanDistance(position, food))
-
-    return max(distances)
+    # position, foodGrid = state
+    #
+    # distances = [0]
+    # for food in foodGrid.asList():
+    #     distances.append(util.manhattanDistance(position, food))
+    #
+    # return max(distances)
 
     # Method 2: use mazeDistance to foodGrid as heuristic
     #           Search nodes expanded: 4137, Score: 570
     #           Path found with total cost of 60 in 2.2 seconds
+    position, foodGrid = state
+
+    def getMazeDistance(start, end):
+        """
+        Returns the maze distance between any two points, using the search functions
+        you have already built.
+        """
+        try:
+            return problem.heuristicInfo[(start, end)]
+        except:
+            prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
+            # problem.heuristicInfo[(start, end)] = len(search.astar(prob, manhattanHeuristic))
+            problem.heuristicInfo[(start, end)] = len(search.bfs(prob))
+            return problem.heuristicInfo[(start, end)]
+
+    distances = [0]
+    for food in foodGrid.asList():
+        distances.append(getMazeDistance(position, food))
+
+    return max(distances)
+
+    # Method 3: randomly choose NUM foods and loop
+    # import random
+    # NUM = 10
+    # heuristic = 0
     # position, foodGrid = state
-    #
-    # def getMazeDistance(start, end):
-    #     """
-    #     Returns the maze distance between any two points, using the search functions
-    #     you have already built.
-    #     """
-    #     try:
-    #         return problem.heuristicInfo[(start, end)]
-    #     except:
-    #         prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
-    #         problem.heuristicInfo[(start, end)] = len(search.bfs(prob))
-    #         return problem.heuristicInfo[(start, end)]
-    #
-    # foodDistance = [getMazeDistance(position, food) for food in foodGrid.asList()]
-    # heuristic = max(foodDistance) if len(foodDistance) != 0 else 0
+    # foodList = foodGrid.asList()
+    # random.shuffle(foodList)
+    # foodSample = foodList[:NUM]
+    # while len(foodSample):
+    #     # cost = [util.manhattanDistance(position, food) for food in foodSample]
+    #     cost = [getMazeDistance(position, food) for food in foodSample]
+    #     heuristic += min(cost)
+    #     position = foodSample[cost.index(min(cost))]
+    #     foodSample.remove(position)
     # return heuristic
-
-    # return 0
-
-    # Method 3:
-    # position, foodGrid = state
-    #
-    # def mazeDistance(point1, point2, gameState):
-    #     """
-    #     Returns the maze distance between any two points, using the search functions
-    #     you have already built. The gameState can be any game state -- Pacman's
-    #     position in that state is ignored.
-    #
-    #     Example usage: mazeDistance( (2,4), (5,6), gameState)
-    #
-    #     This might be a useful helper function for your ApproximateSearchAgent.
-    #     """
-    #     x1, y1 = point1
-    #     x2, y2 = point2
-    #     walls = gameState.getWalls()
-    #     assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
-    #     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
-    #     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
-    #     return len(search.bfs(prob))
-    #
-    # distances = [0]
-    # for food in foodGrid.asList():
-    #     # distances.append(util.manhattanDistance(position, food))
-    #     distances.append(mazeDistance(position, food, problem.startingGameState))
-    #
-    # return max(distances)
 
 
 class ClosestDotSearchAgent(SearchAgent):
