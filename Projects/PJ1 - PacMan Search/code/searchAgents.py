@@ -340,7 +340,7 @@ class CornersProblem(search.SearchProblem):
 
             if not hitsWall:
                 # this means if this corner is visited by next move
-                # remove it from the to be visited corner list
+                # remove it from the unvisited corner list
                 unvisitedCorners = tuple(x for x in state[1] if x != (nextx, nexty))
                 # return a list of triples: (successor, action, stepCost)
                 successors.append((((nextx, nexty), unvisitedCorners), action, 1))  # a cost of 1
@@ -617,6 +617,8 @@ class ClosestDotSearchAgent(SearchAgent):
 
         "*** YOUR CODE HERE ***"
 
+        # return search.dfs(problem)
+        # return search.bfs(problem)
         # return search.ucs(problem)
         return search.astar(problem)
         # util.raiseNotDefined()
