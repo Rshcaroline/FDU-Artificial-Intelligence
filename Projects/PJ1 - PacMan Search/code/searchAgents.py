@@ -559,7 +559,7 @@ def foodHeuristic(state, problem):
 
     return max(distances)
 
-    # Method 3: replace max of sum
+    # Method 3: replace max with sum
     # For trickySearch: Search nodes expanded: 308, Score: 510
     # Path found with total cost of 120 in 0.6 seconds
     # For mediumSearch: Search nodes expanded: 32688, Score: 630
@@ -600,6 +600,14 @@ def foodHeuristic(state, problem):
     #         distances_food.append(getMazeDistance(food, tofood))
     #
     # return min(distances)+max(distances_food)
+
+    # Method 6: eplace max with sum
+    # For trickySearch: Search nodes expanded: 117, Score: 562
+    # Path found with total cost of 68 in 0.6 seconds
+    # For mediumSearch: Search nodes expanded: 198, Score: 1421
+    # Path found with total cost of 159 in 14.8 seconds
+    # However, inconsistent!
+    # return min(distances)+sum(distances_food)
 
 
 class ClosestDotSearchAgent(SearchAgent):
