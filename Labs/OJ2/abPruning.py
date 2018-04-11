@@ -34,6 +34,7 @@ def maxValue(node, alpha, beta):
         return node.value
     val = float("-inf")
     for action in node.successor:
+        # !!!
         action.visited = True
         val = max(val, minValue(action, alpha, beta))
         if val >= beta:
@@ -49,6 +50,7 @@ def minValue(node, alpha, beta):
         return node.value
     val = float("inf")
     for action in node.successor:
+        # !!!
         action.visited = True
         val = min(val, maxValue(action, alpha, beta))
         if val <= alpha:
