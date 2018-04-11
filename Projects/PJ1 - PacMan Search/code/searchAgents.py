@@ -559,7 +559,19 @@ def foodHeuristic(state, problem):
 
     return max(distances)
 
-    # Method 3: randomly choose NUM foods and loop
+    # Method 3: replace max of sum
+    # For trickySearch: Search nodes expanded: 308, Score: 510
+    # Path found with total cost of 120 in 0.6 seconds
+    # For mediumSearch: Search nodes expanded: 32688, Score: 630
+    # Path found with total cost of 950 in 37.2 seconds
+    # However, inconsistent!
+    # return sum(distances)
+
+    # Method 4: randomly choose NUM foods and loop
+    # For trickySearch: Search nodes expanded: 102, Score: 568
+    # Path found with total cost of 62 in 0.4 seconds
+    # Can't solve mediumSearch
+    # However, inconsistent!
     # import random
     # NUM = 10
     # heuristic = 0
@@ -574,6 +586,20 @@ def foodHeuristic(state, problem):
     #     position = foodSample[cost.index(min(cost))]
     #     foodSample.remove(position)
     # return heuristic
+
+    # Method 5: min Pacman2food + max food2food
+    # For trickySearch: Search nodes expanded: 1171, Score: 570
+    # Path found with total cost of 60 in 3.1 seconds
+    # Can't solve mediumSearch
+    # However, inconsistent!
+    # distances = [0]
+    # distances_food = [0]
+    # for food in foodGrid.asList():
+    #     distances.append(getMazeDistance(position, food))
+    #     for tofood in foodGrid.asList():
+    #         distances_food.append(getMazeDistance(food, tofood))
+    #
+    # return min(distances)+max(distances_food)
 
 
 class ClosestDotSearchAgent(SearchAgent):
