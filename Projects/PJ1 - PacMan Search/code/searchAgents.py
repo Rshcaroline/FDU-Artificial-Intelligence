@@ -490,6 +490,95 @@ class MyPositionSearchProblem(PositionSearchProblem):
 
             self._visited, self._visitedlist, self._expanded = {}, [], 0  # DO NOT CHANGE
 
+class FoodSubSearchState:
+    def __init__(self, position, leftFood):
+        self._position = position
+        self._leftFood = leftFood
+
+    @property
+    def position(self):
+        return self._position
+
+    @property
+    def leftFood(self):
+        return self._leftFood
+
+    def __eq__(self, other):
+        return self.position == other.position and self.leftFood == other.leftFood
+
+
+class FoodSubSearchProblem:
+    """
+    A search problem associated with finding the a path that collects all of the
+    food (dots) in a Pacman game.
+    A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
+      pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
+      foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
+    """
+
+    def __init__(self, pacmanPostion, leftFood, verticalWalls, horizontalWalls):
+        self.food = leftFood
+        self.start = FoodSubSearchState(pacmanPostion, leftFood)
+        self.verticalWalls = verticalWalls
+        self.horizontalWalls = horizontalWalls
+        self._expanded = 0  # DO NOT CHANGE
+        self._result = []
+        self._checked = {}
+
+    @property
+    def result(self):
+        return self._result
+
+    @result.setter
+    def result(self, result):
+        self._result = result
+
+    def getStartState(self):
+        return self.start
+
+    def isGoalState(self, state):
+        return len(state.leftFood) == 0
+
+    def getSuccessors(self, state):
+        "Returns successor states, the actions they require, and a cost of 1."
+        successors = []
+        self._expanded += 1  # DO NOT CHANGE
+        shortDistance = 99999
+        shortNode = None
+        for food in state.leftFood:
+            distance = 0
+            if (state.position, food) in self._checked or (
+                    food, state.position) in self._checked:
+                distance = self._checked[(state.position, food)]
+            else:
+                distance = manhattanDistanceWithWall(state.position, food,
+                                                     self.horizontalWalls,
+                                                     self.verticalWalls)
+                self._checked[(state.position, food)] = distance
+                self._checked[(food, state.position)] = distance
+            newLeftFood = state.leftFood[:]
+            newLeftFood.remove(food)
+            successors.append(
+                (FoodSubSearchState(food, newLeftFood), food, distance))
+        return successors
+
+    def getCostOfActions(self, actions):
+        return self.getCostOfActions(self.start.position, actions)
+
+    def getCostOfActions(self, currentPostion, actions):
+        """Returns the cost of a particular sequence of actions.  If those actions
+        include an illegal move, return 999999"""
+        start = currentPostion
+        cost = 0
+        for action in actions:
+            # figure out the next state and see whether it's legal
+            cost += manhattanDistanceWithWall(start, action,
+                                              self.horizontalWalls,
+                                              self.verticalWalls)
+            start = action
+        return cost
+
+
 def foodHeuristic(state, problem):
     """
     Your heuristic for the FoodSearchProblem goes here.
@@ -538,7 +627,28 @@ def foodHeuristic(state, problem):
     # Method 2: use mazeDistance to foodGrid as heuristic
     #           Search nodes expanded: 4137, Score: 570
     #           Path found with total cost of 60 in 2.2 seconds
-    position, foodGrid = state
+    # position, foodGrid = state
+    #
+    # def getMazeDistance(start, end):
+    #     """
+    #     Returns the maze distance between any two points, using the search functions
+    #     you have already built.
+    #     """
+    #     try:
+    #         return problem.heuristicInfo[(start, end)]
+    #     except:
+    #         prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
+    #         problem.heuristicInfo[(start, end)] = len(search.astar(prob))
+    #         return problem.heuristicInfo[(start, end)]
+    #
+    # distances = [0]
+    # for food in foodGrid.asList():
+    #     distances.append(getMazeDistance(position, food))
+    #
+    # return max(distances)
+
+
+    pos, foodGrid = state
 
     def getMazeDistance(start, end):
         """
@@ -549,15 +659,25 @@ def foodHeuristic(state, problem):
             return problem.heuristicInfo[(start, end)]
         except:
             prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
-            # problem.heuristicInfo[(start, end)] = len(search.astar(prob, manhattanHeuristic))
-            problem.heuristicInfo[(start, end)] = len(search.bfs(prob))
+            problem.heuristicInfo[(start, end)] = len(search.astar(prob))
             return problem.heuristicInfo[(start, end)]
 
-    distances = [0]
-    for food in foodGrid.asList():
-        distances.append(getMazeDistance(position, food))
+    closestFood = None
+    furthestFoods = 0;
 
-    return max(distances)
+    for food in foodGrid.asList():
+        for tofood in foodGrid.asList():
+            furthestFoods = max(furthestFoods, getMazeDistance(food, tofood))
+
+    closestFood = None
+    for food in foodGrid.asList():
+        if closestFood==None or closestFood > getMazeDistance(pos, food):
+                    closestFood = getMazeDistance(pos, food);
+
+    if closestFood is None:
+        closestFood = 0;
+
+    return closestFood+furthestFoods;
 
     # Method 3: replace max with sum
     # For trickySearch: Search nodes expanded: 308, Score: 510
@@ -565,6 +685,7 @@ def foodHeuristic(state, problem):
     # For mediumSearch: Search nodes expanded: 32688, Score: 630
     # Path found with total cost of 950 in 37.2 seconds
     # However, inconsistent!
+    #
     # return sum(distances)
 
     # Method 4: randomly choose NUM foods and loop
@@ -572,6 +693,7 @@ def foodHeuristic(state, problem):
     # Path found with total cost of 62 in 0.4 seconds
     # Can't solve mediumSearch
     # However, inconsistent!
+    #
     # import random
     # NUM = 10
     # heuristic = 0
@@ -585,6 +707,7 @@ def foodHeuristic(state, problem):
     #     heuristic += min(cost)
     #     position = foodSample[cost.index(min(cost))]
     #     foodSample.remove(position)
+    # 
     # return heuristic
 
     # Method 5: min Pacman2food + max food2food
@@ -592,14 +715,15 @@ def foodHeuristic(state, problem):
     # Path found with total cost of 60 in 3.1 seconds
     # Can't solve mediumSearch
     # However, inconsistent!
-    # distances = [0]
-    # distances_food = [0]
-    # for food in foodGrid.asList():
-    #     distances.append(getMazeDistance(position, food))
-    #     for tofood in foodGrid.asList():
-    #         distances_food.append(getMazeDistance(food, tofood))
     #
-    # return min(distances)+max(distances_food)
+    distances = [0]
+    distances_food = [0]
+    for food in foodGrid.asList():
+        distances.append(getMazeDistance(position, food))
+        for tofood in foodGrid.asList():
+            distances_food.append(getMazeDistance(food, tofood))
+
+    return min(distances)+max(distances_food)
 
     # Method 6: eplace max with sum
     # For trickySearch: Search nodes expanded: 117, Score: 562
@@ -607,6 +731,7 @@ def foodHeuristic(state, problem):
     # For mediumSearch: Search nodes expanded: 198, Score: 1421
     # Path found with total cost of 159 in 14.8 seconds
     # However, inconsistent!
+    #
     # return min(distances)+sum(distances_food)
 
 

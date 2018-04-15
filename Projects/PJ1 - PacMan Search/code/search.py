@@ -182,7 +182,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         frontier.push(node, cost)
 
     return genericSearch(problem, frontier, frontierAdd)
-    # util.raiseNotDefined()
+    util.raiseNotDefined()
 
 
 # Abbreviations
