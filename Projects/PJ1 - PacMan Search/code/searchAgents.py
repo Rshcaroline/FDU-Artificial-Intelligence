@@ -627,6 +627,7 @@ def foodHeuristic(state, problem):
     # Method 2: use mazeDistance to foodGrid as heuristic
     #           Search nodes expanded: 4137, Score: 570
     #           Path found with total cost of 60 in 2.2 seconds
+    #
     # position, foodGrid = state
     #
     # def getMazeDistance(start, end):
@@ -646,38 +647,6 @@ def foodHeuristic(state, problem):
     #     distances.append(getMazeDistance(position, food))
     #
     # return max(distances)
-
-
-    pos, foodGrid = state
-
-    def getMazeDistance(start, end):
-        """
-        Returns the maze distance between any two points, using the search functions
-        you have already built.
-        """
-        try:
-            return problem.heuristicInfo[(start, end)]
-        except:
-            prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
-            problem.heuristicInfo[(start, end)] = len(search.astar(prob))
-            return problem.heuristicInfo[(start, end)]
-
-    closestFood = None
-    furthestFoods = 0;
-
-    for food in foodGrid.asList():
-        for tofood in foodGrid.asList():
-            furthestFoods = max(furthestFoods, getMazeDistance(food, tofood))
-
-    closestFood = None
-    for food in foodGrid.asList():
-        if closestFood==None or closestFood > getMazeDistance(pos, food):
-                    closestFood = getMazeDistance(pos, food);
-
-    if closestFood is None:
-        closestFood = 0;
-
-    return closestFood+furthestFoods;
 
     # Method 3: replace max with sum
     # For trickySearch: Search nodes expanded: 308, Score: 510
@@ -707,32 +676,45 @@ def foodHeuristic(state, problem):
     #     heuristic += min(cost)
     #     position = foodSample[cost.index(min(cost))]
     #     foodSample.remove(position)
-    # 
+    #
     # return heuristic
 
     # Method 5: min Pacman2food + max food2food
-    # For trickySearch: Search nodes expanded: 1171, Score: 570
-    # Path found with total cost of 60 in 3.1 seconds
+    # For trickySearch: Search nodes expanded: 721, Score: 570
+    # Path found with total cost of 60 in 2.2 seconds
     # Can't solve mediumSearch
-    # However, inconsistent!
-    #
-    distances = [0]
+    
+    position, foodGrid = state
+
+    def getMazeDistance(start, end):
+        """
+        Returns the maze distance between any two points, using the search functions
+        you have already built.
+        """
+        try:
+            return problem.heuristicInfo[(start, end)]
+        except:
+            prob = MyPositionSearchProblem(start=start, goal=end, walls=problem.walls)
+            problem.heuristicInfo[(start, end)] = len(search.astar(prob))
+            return problem.heuristicInfo[(start, end)]
+
+    distances = []
     distances_food = [0]
     for food in foodGrid.asList():
         distances.append(getMazeDistance(position, food))
         for tofood in foodGrid.asList():
             distances_food.append(getMazeDistance(food, tofood))
 
-    return min(distances)+max(distances_food)
+    return min(distances)+max(distances_food) if len(distances) else max(distances_food)
 
     # Method 6: eplace max with sum
     # For trickySearch: Search nodes expanded: 117, Score: 562
-    # Path found with total cost of 68 in 0.6 seconds
+    # Path found with total cost of 68 in 0.5 seconds
     # For mediumSearch: Search nodes expanded: 198, Score: 1421
     # Path found with total cost of 159 in 14.8 seconds
     # However, inconsistent!
     #
-    # return min(distances)+sum(distances_food)
+    # return min(distances)+sum(distances_food) if len(distances) else sum(distances_food)
 
 
 class ClosestDotSearchAgent(SearchAgent):
