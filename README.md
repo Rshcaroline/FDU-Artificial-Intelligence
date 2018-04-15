@@ -20,8 +20,9 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 <h3 id="1">Project 1. Search in Pac-man</h3>
 
 - Adapted from the Berkeley Pac-Man Assignments originally created by John DeNero and Dan Klein.
+- This project is aimed at designing a intelligent Pacman agent that is able to find optimal paths through its maze world considering both reaching particular locations (e.g., finding all the corners) and eating all the dots in as few steps as possible. It can be separated as two subtasks: implementing graph search algorithms for DFS, BFS, UCS as well as A*, and use the search criteria outlined in the lectures to design effective heuristics.
 - The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ1%20-%20PacMan%20Search/pj-1-search.pdf). 
-- In this project, we need to implement graph search version for DFS, BFS, UCS and A*.
+- Report of this project is here.
 
 
 
