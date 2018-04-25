@@ -5,13 +5,13 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 ## Projects
 
-* [1.Search in Pac-Man](#1)
-* [2.TBC](#2)
+* [1. Search in Pac-Man](#1)
+* [2. N Queens](#2)
 
 ## Labs
 
-* [1.Uniform Cost Search](#11)
-* [2.Alpha-Beta pruning](#12)
+* [1. Uniform Cost Search](#11)
+* [2. Alpha-Beta pruning](#12)
 
 
 
@@ -24,6 +24,14 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 - The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ1%20-%20PacMan%20Search/pj-1-search.pdf). 
 - Report of this project is [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ1%20-%20PacMan%20Search/report.pdf).
 
+
+
+
+<h3 id="2">Project 2. N Queens</h3>
+
+- Adapted from *Course Scheduling of Stanford CS221*.
+- It's a programming assignment for *CSP*.
+- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ1%20-%20PacMan%20Search/pj-1-search.pdf). 
 
 
 
