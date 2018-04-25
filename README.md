@@ -16,6 +16,8 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 
 
+## Project Details
+
 
 <h3 id="1">Project 1. Search in Pac-man</h3>
 
@@ -35,9 +37,13 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 
 
+## Lab Details
+
 <h3 id="11">Lab 1. Uniform Cost Search</h3>
 
 - Implement a framed UCS code and complete a online judge.
+
+
 
 <h3 id="12">Lab 2. Alpha-Beta Pruning</h3>
 
