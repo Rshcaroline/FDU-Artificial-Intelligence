@@ -31,7 +31,7 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 - Adapted from *Course Scheduling of Stanford CS221*.
 - It's a programming assignment for *CSP*.
-- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ1%20-%20PacMan%20Search/pj-1-search.pdf). 
+- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ2%20-%20N%20Queens/requirement.pdf). 
 
 
 
