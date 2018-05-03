@@ -19,7 +19,7 @@ class CSP:
 
         # Each entry is a unary factor table for the corresponding variable.
         # The factor table corresponds to the weight distribution of a variable
-        # for all added unary factor functions. If there's no unary function for 
+        # for all added unary factor functions. If there's no unary function for
         # a variable K, there will be no entry for K in unaryFactors.
         # E.g. if B \in ['a', 'b'] is a variable, and we added two
         # unary factor functions f1, f2 for B,
@@ -86,7 +86,7 @@ class CSP:
         had binaryFactors added earlier, they will be *merged* through element
         wise multiplication.
 
-        How to get binary factor value given a variable |var1| with value |val1| 
+        How to get binary factor value given a variable |var1| with value |val1|
         and variable |var2| with value |val2|?
         => csp.binaryFactors[var1][var2][val1][val2]
         """

@@ -17,7 +17,20 @@ def create_nqueens_csp(n = 8):
     csp = util.CSP()
     # Problem 1a
     # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    # raise Exception("Not implemented yet")
+    for i in range(n):
+        csp.add_variable(var=i, domain=range(n))  # adding n variable
+    for i in range(n):
+        for j in range(n):
+            if i != j :
+                def factor_func(x, y):
+                    """
+                    If the two variables already
+                    had binaryFactors added earlier, they will be *merged* through element
+                    wise multiplication.
+                    """
+                    return x != y and abs(x-y) != abs(i-j)
+                csp.add_binary_factor(i, j, factor_func)  # adding some number of binary factors
     # END_YOUR_CODE
     return csp
 
@@ -217,7 +230,18 @@ class BacktrackingSearch():
             #       assignment, a variable, and a proposed value to this variable
             # Hint: for ties, choose the variable with lowest index in self.csp.variables
             # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
-            raise Exception("Not implemented yet")
+            # raise Exception("Not implemented yet")
+            count = 999999
+            for var in self.csp.variables:
+                if var not in assignment:
+                    tmp_cnt = 0
+                    for value in self.domains[var]:
+                        if self.get_delta_weight(assignment, var, value) != 0:
+                            tmp_cnt += 1
+                    # Select a variable with the least number of remaining domain values
+                    if tmp_cnt < count:
+                        count, mcv = tmp_cnt, var
+            return mcv
             # END_YOUR_CODE
 
     def arc_consistency_check(self, var):
@@ -241,5 +265,29 @@ class BacktrackingSearch():
         #   (self.csp.binaryFactors[var1][var2] returns a nested dict of all assignments)
 
         # BEGIN_YOUR_CODE (our solution is 20 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        # raise Exception("Not implemented yet")
+        def revise(x, y):
+            revised = False
+            to_remove = []
+            for value_x in self.domains[x]:
+                allow = False
+                for value_y in self.domains[y]:
+                    if self.csp.binaryFactors[x][y][value_x][value_y]:
+                        allow = True
+                        break
+                if not allow:
+                    to_remove.append(value_x)
+                    revised = True
+            for i in to_remove:
+                self.domains[x].remove(i)
+            return revised
+
+        queue = [(neighbor, var) for neighbor in self.csp.get_neighbor_vars(var)]
+        while len(queue) != 0:
+            x, y = queue.pop()
+            if revise(x, y):
+                for z in self.csp.get_neighbor_vars(x):
+                    if z != y :
+                        queue.append((z, x))
+
         # END_YOUR_CODE
