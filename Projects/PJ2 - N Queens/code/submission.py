@@ -267,27 +267,26 @@ class BacktrackingSearch():
         # BEGIN_YOUR_CODE (our solution is 20 lines of code, but don't worry if you deviate from this)
         # raise Exception("Not implemented yet")
         def revise(x, y):
+            """
+            function REVISE(csp, Xi, Xj) returns True iff we revise the domain of Xi
+            """
             revised = False
-            to_remove = []
-            for value_x in self.domains[x]:
+            for value_x in [value for value in self.domains[x]]:
                 allow = False
                 for value_y in self.domains[y]:
                     if self.csp.binaryFactors[x][y][value_x][value_y]:
                         allow = True
                         break
                 if not allow:
-                    to_remove.append(value_x)
+                    self.domains[x].remove(value_x)
                     revised = True
-            for i in to_remove:
-                self.domains[x].remove(i)
             return revised
 
-        queue = [(neighbor, var) for neighbor in self.csp.get_neighbor_vars(var)]
+        queue = [(neighbor, var) for neighbor in self.csp.get_neighbor_vars(var)]  # a queue of arcs
         while len(queue) != 0:
             x, y = queue.pop()
             if revise(x, y):
                 for z in self.csp.get_neighbor_vars(x):
                     if z != y :
                         queue.append((z, x))
-
         # END_YOUR_CODE

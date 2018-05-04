@@ -24,12 +24,8 @@
             'extraCredit': False,
             'maxPoints': 10,
             'maxSeconds': 1,
-            'messages': ["Exception thrown: <type 'exceptions.TypeError'> -- revise() takes exactly 2 arguments (1 given)",
-                         '  File "grader.py", line 47, in test1c_1\n    acSolver.solve(submission.create_nqueens_csp(8), ac3 = True)\n',
-                         '  File "/Users/ranshihan/Coding/FDU-Artificial-Intelligence/Projects/PJ2 - N Queens/code/submission.py", line 134, in solve\n    self.backtrack({}, 0, 1)\n',
-                         '  File "/Users/ranshihan/Coding/FDU-Artificial-Intelligence/Projects/PJ2 - N Queens/code/submission.py", line 203, in backtrack\n    self.arc_consistency_check(var)\n',
-                         '  File "/Users/ranshihan/Coding/FDU-Artificial-Intelligence/Projects/PJ2 - N Queens/code/submission.py", line 287, in arc_consistency_check\n    if revise(queue.pop()):\n'],
+            'messages': [],
             'name': '1c-1-basic',
-            'points': 0,
+            'points': 10,
             'seconds': 0}],
- 'totalPoints': 10}
+ 'totalPoints': 20}
