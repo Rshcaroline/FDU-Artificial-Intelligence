@@ -18,19 +18,29 @@ def create_nqueens_csp(n = 8):
     # Problem 1a
     # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
     # raise Exception("Not implemented yet")
-    for i in range(n):
-        csp.add_variable(var=i, domain=range(n))  # adding n variable
-    for i in range(n):
-        for j in range(n):
-            if i != j :
-                def factor_func(x, y):
-                    """
-                    If the two variables already
-                    had binaryFactors added earlier, they will be *merged* through element
-                    wise multiplication.
-                    """
-                    return x != y and abs(x-y) != abs(i-j)
-                csp.add_binary_factor(i, j, factor_func)  # adding some number of binary factors
+
+    nqueens = range(n)  # This is n queens' name: 1, 2, 3... It represent at which column the queen is.
+    domains = range(n)  # This means which row of this column the queen can be placed.
+
+    # Add n variable
+    for queen in nqueens:
+        """
+        Add a new variable to the CSP.
+
+        @param var: The list of variable names in the same order as they are added. A
+            variable name can be any hashable objects, for example: int, str,
+            or any tuple with hashtable objects.
+        @param domain: domain values that variable can take on.
+        """
+        csp.add_variable(var=queen, domain=domains)
+
+    # Add binary factors
+    for q1 in nqueens:
+        for q2 in nqueens:
+            # Queens cannot be in the same column
+            if q1 != q2:
+                # Queens cannot be placed in the same row or in the same diagonal
+                csp.add_binary_factor(q1, q2, lambda x, y: x != y and abs(x-y) != abs(q1-q2))
     # END_YOUR_CODE
     return csp
 
@@ -231,16 +241,20 @@ class BacktrackingSearch():
             # Hint: for ties, choose the variable with lowest index in self.csp.variables
             # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
             # raise Exception("Not implemented yet")
-            count = 999999
-            for var in self.csp.variables:
-                if var not in assignment:
+
+            # Choose a maxium count as inital value
+            count = float('inf')
+            for queen in self.csp.variables:
+                # If this queen hasn't been settled so far
+                if queen not in assignment:
                     tmp_cnt = 0
-                    for value in self.domains[var]:
-                        if self.get_delta_weight(assignment, var, value) != 0:
+                    for value in self.domains[queen]:
+                        if self.get_delta_weight(assignment, queen, value) != 0:
+                            # This domain value is legal
                             tmp_cnt += 1
                     # Select a variable with the least number of remaining domain values
                     if tmp_cnt < count:
-                        count, mcv = tmp_cnt, var
+                        count, mcv = tmp_cnt, queen
             return mcv
             # END_YOUR_CODE
 
@@ -266,27 +280,40 @@ class BacktrackingSearch():
 
         # BEGIN_YOUR_CODE (our solution is 20 lines of code, but don't worry if you deviate from this)
         # raise Exception("Not implemented yet")
-        def revise(x, y):
+        def revise(Xi, Xj):
             """
             function REVISE(csp, Xi, Xj) returns True iff we revise the domain of Xi
             """
+            # Set a flag to see if Di is changed
             revised = False
-            for value_x in [value for value in self.domains[x]]:
+            for value_Xi in [value for value in self.domains[Xi]]:
                 allow = False
-                for value_y in self.domains[y]:
-                    if self.csp.binaryFactors[x][y][value_x][value_y]:
+                for value_Xj in self.domains[Xj]:
+                    if self.csp.binaryFactors[Xi][Xj][value_Xi][value_Xj]:
+                        # This combination of variables and values are legal
                         allow = True
                         break
                 if not allow:
-                    self.domains[x].remove(value_x)
+                    # This value is not legal, may make arc inconsistent, remove it
+                    self.domains[Xi].remove(value_Xi)
                     revised = True
             return revised
 
+        # We maintain a queue of arcs to consider arc consistency
+        # Initially, the queue contains all the arcs in the CSP
         queue = [(neighbor, var) for neighbor in self.csp.get_neighbor_vars(var)]  # a queue of arcs
+
         while len(queue) != 0:
-            x, y = queue.pop()
-            if revise(x, y):
-                for z in self.csp.get_neighbor_vars(x):
-                    if z != y :
-                        queue.append((z, x))
+            # Pops off an arbitrary arc (Xi , Xj) from the queue
+            Xi, Xj = queue.pop()
+
+            # Use revise to make sure Xi is arc-consistent with respect to Xj
+            # If this leaves Di unchanged, the algorithm just moves on to the next arc
+            # If this revises Di (makes the domain smaller)
+            if revise(Xi, Xj):
+                # Add to the queue all arcs (Xk, Xi) where Xk is a neighbor of Xi
+                # Because the change in Di might enable further reductions in the domains of Dk
+                for Xk in self.csp.get_neighbor_vars(Xi):
+                    if Xk != Xj:
+                        queue.append((Xk, Xi))
         # END_YOUR_CODE
