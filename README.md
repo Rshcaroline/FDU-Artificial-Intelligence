@@ -7,6 +7,7 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 * [1. Search in Pac-Man](#1)
 * [2. N Queens](#2)
+* [Final. Gomoku Competition](#9)
 
 ## Labs
 
@@ -34,6 +35,20 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 - Adapted from *Course Scheduling of Stanford CS221*.
 - It's a programming assignment for *CSP*.
 - The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ2%20-%20N%20Queens/requirement.pdf). 
+
+
+
+
+<h3 id="9">Final project. Gomoku Competition</h3>
+
+- Gomoku Rule: Standard Gomoku Rule(exact five)
+- Balanced opening from a set
+- The board has 20x20 squares
+- 30 seconds per move, 180 seconds per match
+- 10 fixed AI, 12 matches with each one
+- 3 points for a win
+- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Labs/OJ2/lab2.pdf). 
+
 
 
 
