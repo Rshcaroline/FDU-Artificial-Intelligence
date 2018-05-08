@@ -41,12 +41,8 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 <h3 id="9">Final project. Gomoku Competition</h3>
 
-- Gomoku Rule: Standard Gomoku Rule(exact five)
-- Balanced opening from a set
-- The board has 20x20 squares
-- 30 seconds per move, 180 seconds per match
-- 10 fixed AI, 12 matches with each one
-- 3 points for a win
+- Gomoku Competition is a competition of artificial intelligences playing gomoku. 
+- The aim of competitors is to program a computer artificial intelligence (AI) playing the gomoku game (also called Five in a Row, Connect 5 or Gobang) as good as possible. 
 - The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Labs/OJ2/lab2.pdf). 
 
 
