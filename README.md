@@ -43,7 +43,7 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 - Gomoku Competition is a competition of artificial intelligences playing gomoku. 
 - The aim of competitors is to program a computer artificial intelligence (AI) playing the gomoku game (also called Five in a Row, Connect 5 or Gobang) as good as possible. 
-- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Labs/OJ2/lab2.pdf). 
+- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Labs/OJ2/lab-2.pdf). 
 
 
 
