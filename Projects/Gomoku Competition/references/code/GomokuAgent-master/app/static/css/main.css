@@ -1,0 +1,105 @@
+/* Copied and Modified from opensource project https://github.com/lihongxun945/gobang */
+
+html {
+  font-size: 10px;
+}
+
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+@media (min-width: 370px) {
+  html {
+    font-size: 11px;
+  }
+}
+@media (min-width: 400px) {
+  html {
+    font-size: 12px;
+  }
+}
+@media (min-width: 500px) {
+  html {
+    font-size: 14px;
+  }
+}
+h1 {
+  color: #3cc51f;
+  font-size: 2rem;
+  margin: 1rem;
+  text-align: center;
+}
+p {
+  font-size: 1.4rem;
+  color: #999;
+  text-align: center;
+}
+.board {
+  position: relative;
+  background: url("../img/board.jpg");
+  width: 32rem;
+  height: 32rem;
+  margin: 1.5rem auto;
+  background-size: 100%;
+}
+.board .chessman {
+  height: 1.7rem;
+  width: 1.7rem;
+  margin-left: -0.85rem;
+  margin-top: -0.85rem;
+  border-radius: .85rem;
+  background: white;
+  position: absolute;
+  cursor: no-drop;
+  user-select: none;
+}
+.board .chessman.black {
+  background: black;
+}
+.board .indicator {
+  box-sizing: border-box;
+  height: 2rem;
+  width: 2rem;
+  margin-left: -1rem;
+  margin-top: -1rem;
+  border: 1px solid #EF4F4F;
+  position: absolute;
+}
+.buttons {
+  width: 30rem;
+  margin: auto;
+  padding-bottom: 1rem;
+}
+.status {
+  text-align: center;
+  margin: 1rem;
+  font-size: 1.4rem;
+  height: 2rem;
+  line-height: 2rem;
+  color: #666;
+}
+
+@media screen and (min-width: 1024px) {
+  .weui_dialog,
+  .weui_toast {
+    left: 32.5%;
+  }
+}
+footer {
+  margin: 1rem;
+  text-align: center;
+  color: gray;
+}
+
+input {
+  width: 50px;
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+

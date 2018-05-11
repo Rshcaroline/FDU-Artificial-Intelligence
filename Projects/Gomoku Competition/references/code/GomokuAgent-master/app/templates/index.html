@@ -1,0 +1,80 @@
+<!--Copied and Modified from opensource project https://github.com/lihongxun945/gobang -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Welcome to Gomoku Agent!</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/css/weui.min.css">
+    <link rel="stylesheet" href="/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+  </head>
+  <body ontouchstart>
+    <h1>Gomoku Agent</h1>
+    <p>
+      Final project for 
+        <a href="http://www.sdspeople.fudan.edu.cn/zywei/DATA130008/">Artificial Intelligence</a>
+        (DATA130008.01) @<a href="http://fudan.edu.cn/">Fudan University</a>.
+    </p>
+    <p>
+        Black:
+                <select class="weui-select" name="BlackPlayer">
+                    <option value="You">You</option>
+                    <option value="AI0">AI0</option>
+                    <option value="AI1">AI1</option>
+                    <option value="AI2">AI2</option>
+                    <option value="AI3">AI3</option>
+                    <option value="AI4">AI4</option>
+                    <option value="AI5">AI5</option>
+                    <option value="AI6">AI6</option>
+                    <!-- <option value="AI7">AI7</option> -->
+                </select>
+        White:
+                <select class="weui-select" name="WhitePlayer">
+                    <option value="You">You</option>
+                    <option value="AI0">AI0</option>
+                    <option value="AI1">AI1</option>
+                    <option value="AI2">AI2</option>
+                    <option value="AI3">AI3</option>
+                    <option value="AI4">AI4</option>
+                    <option value="AI5">AI5</option>
+                    <option value="AI6">AI6</option>
+                    <!-- <option value="AI7">AI7</option> -->
+                </select>
+    </p>
+    <div class="board-outer">
+      <div class="board" id="board">
+      </div>
+    </div>
+
+    <div class="status">
+    </div>
+
+    <div class="buttons">
+      <div class="weui-row">
+        <div class="weui-col-33">
+          <a href="javascript:;" class="weui_btn weui_btn_primary" id='start'>Start</a>
+        </div>
+        <div class="weui-col-33">
+          <a href="javascript:;" class="weui_btn weui_btn_warn" id='fail'>Resign</a>
+        </div>
+        <div class="weui-col-33">
+          <a href="javascript:;" class="weui_btn weui_btn_default" id='undo'>Undo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="weui-footer">
+        <p class="weui-footer__text">Copyright © 2017 <a href="mailto:txhu14@fudan.edu.cn">Tianxiao Hu</a>,
+            Hui Xu, Bing Zhang</p>
+    </div>
+
+    <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }}; </script>
+    <script src='/static/js/jquery-2.1.4.js'></script>
+    <script src='/static/js/jquery-weui.js'></script>
+    <script src='/static/js/main.js'></script>
+  </body>
+</html>

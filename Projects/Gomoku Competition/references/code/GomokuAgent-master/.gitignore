@@ -1,0 +1,10 @@
+*.pyc
+.idea/
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.sgf
+.ipynb_checkpoints/
