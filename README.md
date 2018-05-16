@@ -13,6 +13,7 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 * [1. Uniform Cost Search](#11)
 * [2. Alpha-Beta pruning](#12)
+* [3. Reinforcement Learning](#13)
 
 
 
@@ -52,16 +53,16 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 <h3 id="11">Lab 1. Uniform Cost Search</h3>
 
-- Implement a framed UCS code and complete a online judge.
+- Implement a framed UCS code and complete online judge.
 
 
 
 <h3 id="12">Lab 2. Alpha-Beta Pruning</h3>
 
-- Implement a framed Alpha-Beta pruning code and complete a online judge.
+- Implement a framed Alpha-Beta pruning code and complete online judge.
 
 
 
+<h3 id="13">Lab 3. Reinforcement Learning</h3>
 
-
-
+- Implement a framed reinforcement learning code and complete online judge.

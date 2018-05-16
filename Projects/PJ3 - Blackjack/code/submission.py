@@ -2,6 +2,7 @@ import util, math, random
 from collections import defaultdict
 from util import ValueIteration
 
+
 ############################################################
 # Problem 2a
 
@@ -65,8 +66,8 @@ class BlackjackMDP(util.MDP):
 
     # Return a list of (newState, prob, reward) tuples corresponding to edges
     # coming out of |state|.  Indicate a terminal state (after quitting or
-    # busting) by setting the deck to None. 
-    # When the probability is 0 for a particular transition, don't include that 
+    # busting) by setting the deck to None.
+    # When the probability is 0 for a particular transition, don't include that
     # in the list returned by succAndProbReward.
     def succAndProbReward(self, state, action):
         # BEGIN_YOUR_CODE (our solution is 53 lines of code, but don't worry if you deviate from this)
@@ -179,4 +180,3 @@ originalMDP = BlackjackMDP(cardValues=[1, 5], multiplicity=2, threshold=10, peek
 
 # New threshold
 newThresholdMDP = BlackjackMDP(cardValues=[1, 5], multiplicity=2, threshold=15, peekCost=1)
-
