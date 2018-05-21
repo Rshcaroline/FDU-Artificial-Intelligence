@@ -188,7 +188,16 @@ class QLearningAlgorithm(util.RLAlgorithm):
     # self.getQ() to compute the current estimate of the parameters.
     def incorporateFeedback(self, state, action, reward, newState):
         # BEGIN_YOUR_CODE (our solution is 12 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        Vopt = 0
+        if newState != None:
+            Vopt = max((self.getQ(newState, nextAction), nextAction) for nextAction in self.actions(newState))[0]
+        prediction = self.getQ(state,action)
+        target = reward + self.discount * Vopt
+        eta = self.getStepSize()
+        scale = eta * (prediction - target)
+        for f, v in self.featureExtractor(state, action):
+            self.weights[f] -= scale * v
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
 # Return a singleton list containing indicator feature for the (state, action)
@@ -221,9 +230,19 @@ largeMDP.computeStates()
 #       Only add this feature if the deck != None
 # - indicator on the number of cards for each card type and the action (len(counts) features).  Only add these features if the deck != None
 def blackjackFeatureExtractor(state, action):
-    total, nextCard, counts = state
+    # total, nextCard, counts = state
     # BEGIN_YOUR_CODE (our solution is 9 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    totalValue, peekedIndex, deckCardNum = state
+    
+    arr = []
+    arr.append((('total_feature', totalValue, action), 1))
+    if deckCardNum != None:
+        arr.append((('card_presense', tuple([1 if x else 0 for x in deckCardNum]), action), 1))
+    if deckCardNum != None:
+        for i in range(0,len(deckCardNum)):
+            arr.append((('num_cards', i, deckCardNum[i], action), 1))
+    return arr
+    # raise Exception("Not implemented yet")
     # END_YOUR_CODE
 
 ############################################################
