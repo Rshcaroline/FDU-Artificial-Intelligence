@@ -75,7 +75,59 @@ class BlackjackMDP(util.MDP):
     # in the list returned by succAndProbReward.
     def succAndProbReward(self, state, action):
         # BEGIN_YOUR_CODE (our solution is 53 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        # (totalCardValueInHand, nextCardIndexIfPeeked, deckCardCounts)
+        totalValue, peekedIndex, deckCardNum = state
+        if deckCardNum == None or sum(deckCardNum) == 0:
+            return []
+
+        allStates = []
+        if action == 'Quit':
+            return [((totalValue, None, None), 1, totalValue)]
+
+        if action == 'Peek':
+            if peekedIndex:
+                return []
+            else:
+                totalCardNum = sum(deckCardNum)
+                for i in range(0, len(deckCardNum)):
+                    if deckCardNum[i]:
+                        peeked = i
+                        peekProb = float(deckCardNum[peeked]) / totalCardNum
+                        allStates.append(((totalValue, peeked, deckCardNum), peekProb, -self.peekCost))
+            return allStates
+
+        if action == 'Take':
+            if peekedIndex:
+                newTotalValue = totalValue + self.cardValues[peekedIndex]
+                if newTotalValue > self.threshold:
+                    return [((newTotalValue, None, None), 1, 0)]
+                else:
+                    newDeckCardNum = list(deckCardNum)
+                    newDeckCardNum[peekedIndex] -= 1
+                    newDeckCardNum = tuple(newDeckCardNum)
+                    if sum(newDeckCardNum) == 0:
+                        return [((newTotalValue, None, None), 1, newTotalValue)]
+                    else:
+                        return [((newTotalValue, None, newDeckCardNum), 1, 0)]
+            else:
+                totalCardNum = sum(deckCardNum)
+                for i in range(0, len(deckCardNum)):
+                    if deckCardNum[i]:
+                        selected = i
+                        selectProb = float(deckCardNum[selected]) / totalCardNum
+                        newTotalValue = totalValue + self.cardValues[selected]
+                        if newTotalValue > self.threshold:
+                            allStates.append(((newTotalValue, None, None), selectProb, 0))
+                        else:
+                            newDeckCardNum = list(deckCardNum)
+                            newDeckCardNum[selected] -= 1
+                            newDeckCardNum = tuple(newDeckCardNum)
+                            if sum(newDeckCardNum) == 0:
+                                allStates.append(((newTotalValue, None, None), selectProb, newTotalValue))
+                            else:
+                                allStates.append(((newTotalValue, None, newDeckCardNum), selectProb, 0))
+                return allStates
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
     def discount(self):
