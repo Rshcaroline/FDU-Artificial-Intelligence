@@ -109,37 +109,20 @@ class BlackjackMDP(util.MDP):
                         return [((totalValue, None, None), 1, totalValue)]
                     else:
                         return [((totalValue, None, tuple(listDeckCardNum)), 1, 0)]
-            # random take one card
-            # else:
-            #     for i in range(len(deckCardNum)):
-            #         if deckCardNum[i]:
-            #             takeProb = float(deckCardNum[i]) / sum(deckCardNum)
-            #             totalValue += self.cardValues[i]
-            #             if totalValue > self.threshold:
-            #                 allStates.append(((totalValue, None, None), takeProb, 0))
-            #             else:
-            #                 listDeckCardNum = list(deckCardNum)
-            #                 listDeckCardNum[i] -= 1
-            #                 if sum(listDeckCardNum) == 0:
-            #                     allStates.append(((totalValue, None, None), takeProb, totalValue))
-            #                 else:
-            #                     allStates.append(((totalValue, None, tuple(listDeckCardNum)), takeProb, 0))
-            #     return allStates
             else:
                 for i in range(0, len(deckCardNum)):
                     if deckCardNum[i]:
-                        selectProb = float(deckCardNum[i]) / sum(deckCardNum)
+                        takeProb = float(deckCardNum[i]) / sum(deckCardNum)
                         newTotalValue = totalValue + self.cardValues[i]
                         if newTotalValue > self.threshold:
-                            allStates.append(((newTotalValue, None, None), selectProb, 0))
+                            allStates.append(((newTotalValue, None, None), takeProb, 0))
                         else:
-                            newDeckCardNum = list(deckCardNum)
-                            newDeckCardNum[i] -= 1
-                            newDeckCardNum = tuple(newDeckCardNum)
-                            if sum(newDeckCardNum) == 0:
-                                allStates.append(((newTotalValue, None, None), selectProb, newTotalValue))
+                            listDeckCardNum = list(deckCardNum)
+                            listDeckCardNum[i] -= 1
+                            if sum(listDeckCardNum) == 0:
+                                allStates.append(((newTotalValue, None, None), takeProb, newTotalValue))
                             else:
-                                allStates.append(((newTotalValue, None, newDeckCardNum), selectProb, 0))
+                                allStates.append(((newTotalValue, None, tuple(listDeckCardNum)), takeProb, 0))
                 return allStates
         # raise Exception("Not implemented yet")
         # END_YOUR_CODE
@@ -156,7 +139,8 @@ def peekingMDP():
     least 10% of the time.
     """
     # BEGIN_YOUR_CODE (our solution is 2 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    return BlackjackMDP(cardValues=[1, 2, 3, 4, 5, 100], multiplicity=1, threshold=20, peekCost=1)
+    # raise Exception("Not implemented yet")
     # END_YOUR_CODE
 
 ############################################################
