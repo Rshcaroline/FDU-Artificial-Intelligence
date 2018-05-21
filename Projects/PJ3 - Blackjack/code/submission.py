@@ -75,52 +75,66 @@ class BlackjackMDP(util.MDP):
     # in the list returned by succAndProbReward.
     def succAndProbReward(self, state, action):
         # BEGIN_YOUR_CODE (our solution is 53 lines of code, but don't worry if you deviate from this)
+
         # (totalCardValueInHand, nextCardIndexIfPeeked, deckCardCounts)
         totalValue, peekedIndex, deckCardNum = state
-        if deckCardNum == None or sum(deckCardNum) == 0:
+
+        # Setting the deck to None signifies the end of the game
+        if deckCardNum == None:
             return []
 
         allStates = []
-        if action == 'Quit':
+        if action == 'Quit':   # If she quits, then the resulting state will be (x, None, None)
             return [((totalValue, None, None), 1, totalValue)]
 
         if action == 'Peek':
-            if peekedIndex:
-                return []
-            else:
-                totalCardNum = sum(deckCardNum)
-                for i in range(0, len(deckCardNum)):
-                    if deckCardNum[i]:
-                        peeked = i
-                        peekProb = float(deckCardNum[peeked]) / totalCardNum
-                        allStates.append(((totalValue, peeked, deckCardNum), peekProb, -self.peekCost))
+            for i in range(len(deckCardNum)):
+                if deckCardNum[i]:   # index of cards which are still on the deck, starts from 0
+                    peekProb = float(deckCardNum[i]) / sum(deckCardNum)
+                    allStates.append(((totalValue, i, deckCardNum), peekProb, -self.peekCost))
             return allStates
 
         if action == 'Take':
+            # If it is to be peeked
             if peekedIndex:
-                newTotalValue = totalValue + self.cardValues[peekedIndex]
-                if newTotalValue > self.threshold:
-                    return [((newTotalValue, None, None), 1, 0)]
+                totalValue += self.cardValues[peekedIndex]
+                if totalValue > self.threshold:
+                    # the deck is set to None to signify the game ended with a bust
+                    return [((totalValue, None, None), 1, 0)]
                 else:
-                    newDeckCardNum = list(deckCardNum)
-                    newDeckCardNum[peekedIndex] -= 1
-                    newDeckCardNum = tuple(newDeckCardNum)
-                    if sum(newDeckCardNum) == 0:
-                        return [((newTotalValue, None, None), 1, newTotalValue)]
+                    # Notice: tuple is unchangeable
+                    listDeckCardNum = list(deckCardNum)
+                    listDeckCardNum[peekedIndex] -= 1
+                    if sum(listDeckCardNum) == 0:
+                        return [((totalValue, None, None), 1, totalValue)]
                     else:
-                        return [((newTotalValue, None, newDeckCardNum), 1, 0)]
+                        return [((totalValue, None, tuple(listDeckCardNum)), 1, 0)]
+            # random take one card
+            # else:
+            #     for i in range(len(deckCardNum)):
+            #         if deckCardNum[i]:
+            #             takeProb = float(deckCardNum[i]) / sum(deckCardNum)
+            #             totalValue += self.cardValues[i]
+            #             if totalValue > self.threshold:
+            #                 allStates.append(((totalValue, None, None), takeProb, 0))
+            #             else:
+            #                 listDeckCardNum = list(deckCardNum)
+            #                 listDeckCardNum[i] -= 1
+            #                 if sum(listDeckCardNum) == 0:
+            #                     allStates.append(((totalValue, None, None), takeProb, totalValue))
+            #                 else:
+            #                     allStates.append(((totalValue, None, tuple(listDeckCardNum)), takeProb, 0))
+            #     return allStates
             else:
-                totalCardNum = sum(deckCardNum)
                 for i in range(0, len(deckCardNum)):
                     if deckCardNum[i]:
-                        selected = i
-                        selectProb = float(deckCardNum[selected]) / totalCardNum
-                        newTotalValue = totalValue + self.cardValues[selected]
+                        selectProb = float(deckCardNum[i]) / sum(deckCardNum)
+                        newTotalValue = totalValue + self.cardValues[i]
                         if newTotalValue > self.threshold:
                             allStates.append(((newTotalValue, None, None), selectProb, 0))
                         else:
                             newDeckCardNum = list(deckCardNum)
-                            newDeckCardNum[selected] -= 1
+                            newDeckCardNum[i] -= 1
                             newDeckCardNum = tuple(newDeckCardNum)
                             if sum(newDeckCardNum) == 0:
                                 allStates.append(((newTotalValue, None, None), selectProb, newTotalValue))
