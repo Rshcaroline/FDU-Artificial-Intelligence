@@ -11,25 +11,29 @@ from util import ValueIteration
 class CounterexampleMDP(util.MDP):
     def startState(self):
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        return 0
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
     # Return set of actions possible from |state|.
     def actions(self, state):
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        return [-1, 1] if state == 0 else [state]
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
     # Return a list of (newState, prob, reward) tuples corresponding to edges
     # coming out of |state|.
     def succAndProbReward(self, state, action):
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        return [(-1, 0.9, 0), (1, 0.1, 100)] if state == 0 else [(state, 1, 0)]
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
     def discount(self):
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        return 1
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
 ############################################################
