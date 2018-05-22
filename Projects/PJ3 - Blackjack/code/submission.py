@@ -164,7 +164,7 @@ class QLearningAlgorithm(util.RLAlgorithm):
     # Return the Q function associated with the weights and features
     def getQ(self, state, action):
         score = 0
-        for f, v in self.featureExtractor(state, action):
+        for f, v in self.featureExtractor(state, action):   # (feature name, feature value) pairs
             score += self.weights[f] * v
         return score
 
@@ -189,14 +189,14 @@ class QLearningAlgorithm(util.RLAlgorithm):
     def incorporateFeedback(self, state, action, reward, newState):
         # BEGIN_YOUR_CODE (our solution is 12 lines of code, but don't worry if you deviate from this)
         Vopt = 0
-        if newState != None:
+        if newState != None:   # Note that if s is a terminal state, then s' will be None.
             Vopt = max((self.getQ(newState, nextAction), nextAction) for nextAction in self.actions(newState))[0]
-        prediction = self.getQ(state,action)
+        prediction = self.getQ(state, action)
         target = reward + self.discount * Vopt
-        eta = self.getStepSize()
-        scale = eta * (prediction - target)
+        alpha = self.getStepSize()
+        scale = alpha * (target - prediction)
         for f, v in self.featureExtractor(state, action):
-            self.weights[f] -= scale * v
+            self.weights[f] += scale * v
         # raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
@@ -226,22 +226,22 @@ largeMDP.computeStates()
 # Implement the following features:
 # - indicator on the total and the action (1 feature).
 # - indicator on the presence/absence of each card and the action (1 feature).
-#       Example: if the deck is (3, 4, 0 , 2), then your indicator on the presence of each card is (1,1,0,1)
+#       Example: if the deck is (3, 4, 0, 2), then your indicator on the presence of each card is (1,1,0,1)
 #       Only add this feature if the deck != None
 # - indicator on the number of cards for each card type and the action (len(counts) features).  Only add these features if the deck != None
 def blackjackFeatureExtractor(state, action):
     # total, nextCard, counts = state
     # BEGIN_YOUR_CODE (our solution is 9 lines of code, but don't worry if you deviate from this)
     totalValue, peekedIndex, deckCardNum = state
-    
-    arr = []
-    arr.append((('total_feature', totalValue, action), 1))
+
+    features = []
+    features.append((('total_feature', totalValue, action), 1))
     if deckCardNum != None:
-        arr.append((('card_presense', tuple([1 if x else 0 for x in deckCardNum]), action), 1))
+        features.append((('card_presense', tuple([1 if x else 0 for x in deckCardNum]), action), 1))
     if deckCardNum != None:
-        for i in range(0,len(deckCardNum)):
-            arr.append((('num_cards', i, deckCardNum[i], action), 1))
-    return arr
+        for i in range(len(deckCardNum)):
+            features.append((('num_cards', i, deckCardNum[i], action), 1))
+    return features
     # raise Exception("Not implemented yet")
     # END_YOUR_CODE
 
