@@ -235,12 +235,12 @@ def blackjackFeatureExtractor(state, action):
     totalValue, peekedIndex, deckCardNum = state
 
     features = []
-    features.append((('total_feature', totalValue, action), 1))
+    features.append(((totalValue, action), 1))
     if deckCardNum != None:
-        features.append((('card_presense', tuple([1 if x else 0 for x in deckCardNum]), action), 1))
+        features.append(((tuple([1 if x else 0 for x in deckCardNum]), action), 1))
     if deckCardNum != None:
         for i in range(len(deckCardNum)):
-            features.append((('num_cards', i, deckCardNum[i], action), 1))
+            features.append(((i, deckCardNum[i], action), 1))
     return features
     # raise Exception("Not implemented yet")
     # END_YOUR_CODE
