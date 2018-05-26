@@ -84,3 +84,17 @@ Other non-terminal states' optimal policy is $\pi_{opt}(-1)=-1$, $\pi_{opt}(0)=+
 
 ## PROBLEM 2: TRANSFORMING MDPS
 
+### 2a. Check my Code.
+
+### 2b. Question
+
+Suppose we have an acyclic MDP (you will not visit a state a second time in this process). We could run value iteration, which would require multiple iterations. Briefly explain a more efficient algorithm that only requires one pass over all the triples. 
+
+### 2b. Answer
+
+### 2c. Question
+
+
+
+
+
