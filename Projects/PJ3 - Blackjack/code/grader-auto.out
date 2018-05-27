@@ -33,7 +33,7 @@
             'messages': [],
             'name': '3a-hidden',
             'points': 0,
-            'seconds': 2},
+            'seconds': 0},
            {'description': 'Test for peekingMDP().  Ensure that in at least 10% of states, the optimal policy is to peek.',
             'extraCredit': False,
             'maxPoints': 4,

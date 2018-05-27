@@ -66,7 +66,8 @@ $$
 \begin{aligned}
 V_{2}(-2)&=0\\
 V_{2}(-1)&=\max \{0.8*(20+0)+0.2*(-5-5), 0.3*(-5-5)+0.7*(20+0)\}=14\\
-V_{2}(0)&=\max \{0.8*(-5+15)+0.2*(-5+26.5), 0.3*(-5+26.5)+0.7*(-5+15)\}=13.45\\
+V_{2}(0)&=\max \{0.8*(-5+15)+0.2*(-5+26.5), 0.3*(-5+26.5)+0.7*(-5+15)\}\\
+&=13.45\\
 V_{2}(1)&=\max \{0.8*(-5-5)+0.2*(100+0), 0.3*(100+0)+0.7*(-5-5)\}=23\\
 V_{2}(2)&=0\\
 \end{aligned}
@@ -131,8 +132,8 @@ Call *simulate()* using your algorithm and the *identityFeatureExtractor()* on t
 
 |                                              | Small MDP                                                    | Large MDP                                                    |
 | -------------------------------------------- | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| Value Iteration                              | 5                                                            | 29                                                           |
-| Intersection probabilitiy between 2 policies | 0.74                                                         | 0.61                                                         |
+| Value Iteration                              | 5                                                            | 15                                                           |
+| Intersection probabilitiy between 2 policies | 0.74                                                         | 0.67                                                         |
 | Reasons                                      | Since the relatively small state space allows Q­learning algorithm to learn the Q values better, Q­learning does better than value iteration. | Since the state space is much lager, which make Q­learning algorithm not capable of learning accurate Q values. Also, our implemented *identityFeatureExtractor* can only return a singleton list containing indicator feature for the (state, action) pair and it provides no generalization. |
 
 ### 4c. Check my Code.

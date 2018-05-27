@@ -89,6 +89,8 @@ class BlackjackMDP(util.MDP):
             return [((totalValue, None, None), 1, totalValue)]
 
         if action == 'Peek':
+            if peekedIndex:
+                return []
             for i in range(len(deckCardNum)):
                 if deckCardNum[i]:   # index of cards which are still on the deck, starts from 0
                     peekProb = float(deckCardNum[i]) / sum(deckCardNum)
@@ -213,37 +215,37 @@ def identityFeatureExtractor(state, action):
 # Small test case
 smallMDP = BlackjackMDP(cardValues=[1, 5], multiplicity=2, threshold=10, peekCost=1)
 
-# rl = QLearningAlgorithm(smallMDP.actions, smallMDP.discount(), identityFeatureExtractor, explorationProb=0)
-# util.simulate(smallMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)
-# smallMDP.computeStates()
-# policy_rl={}
-# for s in smallMDP.states:
-#     policy_rl[s]=rl.getAction(s)
-#
-# val = util.ValueIteration()
-# val.solve(smallMDP)
-# policy_val=val.pi
-#
-# intersection = [1 if policy_rl[k] == policy_val[k] else 0 for k in policy_rl ]
-# print float(sum(intersection))/len(policy_rl)
+rl = QLearningAlgorithm(smallMDP.actions, smallMDP.discount(), identityFeatureExtractor, explorationProb=0)
+util.simulate(smallMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)
+smallMDP.computeStates()
+policy_rl={}
+for s in smallMDP.states:
+    policy_rl[s]=rl.getAction(s)
+
+val = util.ValueIteration()
+val.solve(smallMDP)
+policy_val=val.pi
+
+intersection = [1 if policy_rl[k] == policy_val[k] else 0 for k in policy_rl ]
+print float(sum(intersection))/len(policy_rl)
 
 # Large test case
 largeMDP = BlackjackMDP(cardValues=[1, 3, 5, 8, 10], multiplicity=3, threshold=40, peekCost=1)
 largeMDP.computeStates()
 
-# rl = QLearningAlgorithm(largeMDP.actions, largeMDP.discount(), identityFeatureExtractor, explorationProb=0)
-# util.simulate(largeMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)
-# largeMDP.computeStates()
-# policy_rl={}
-# for s in largeMDP.states:
-#     policy_rl[s]=rl.getAction(s)
-#
-# val = util.ValueIteration()
-# val.solve(largeMDP)
-# policy_val=val.pi
-#
-# intersection = [1 if policy_rl[k] == policy_val[k] else 0 for k in policy_rl ]
-# print float(sum(intersection))/len(policy_rl)
+rl = QLearningAlgorithm(largeMDP.actions, largeMDP.discount(), identityFeatureExtractor, explorationProb=0)
+util.simulate(largeMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)
+largeMDP.computeStates()
+policy_rl={}
+for s in largeMDP.states:
+    policy_rl[s]=rl.getAction(s)
+
+val = util.ValueIteration()
+val.solve(largeMDP)
+policy_val=val.pi
+
+intersection = [1 if policy_rl[k] == policy_val[k] else 0 for k in policy_rl ]
+print float(sum(intersection))/len(policy_rl)
 
 
 ############################################################
