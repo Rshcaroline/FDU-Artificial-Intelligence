@@ -7,6 +7,8 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 * [1. Search in Pac-Man](#1)
 * [2. N Queens](#2)
+* [3. BlackJack](#3)
+* [4. Car](#4)
 * [Final. Gomoku Competition](#9)
 
 ## Labs
@@ -37,6 +39,21 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 - It's a programming assignment for *CSP*.
 - The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ2%20-%20N%20Queens/requirement.pdf). 
 
+
+
+<h3 id="3">Project 3. BlackJack</h3>
+
+- Adapted from *Course Scheduling of Stanford CS221*.
+- It's a programming assignment for *Markov Decision Process* and *Reinforcement Learning*.
+- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ3%20-%20Blackjack/requirement.pdf). 
+
+
+
+<h3 id="4">Project 4. Car</h3>
+
+- Adapted from *Course Scheduling of Stanford CS221*.
+- It's a programming assignment for xxx.
+- The detailed requirements are [here](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/Projects/PJ4%20-%20Car/requirement.pdf). 
 
 
 
