@@ -90,7 +90,13 @@ Other non-terminal states' optimal policy is $\pi_{opt}(-1)=-1$, $\pi_{opt}(0)=+
 
 Suppose we have an acyclic MDP (you will not visit a state a second time in this process). We could run value iteration, which would require multiple iterations. Briefly explain a more efficient algorithm that only requires one pass over all the triples. 
 
-### ==2b. Answer==
+### 2b. Answer
+
+Recall the *value iteration* formula:
+$$
+V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s,a,s') [R(s,a,s')+\gamma V_k(s')]
+$$
+The reason why value iteration requires multiple iterations is that we don't have an specific order over states. If we have an acyclic MDP and we will not visit a state a second time in this process, we can derive a specific tree structure which represents the order of states. So we can simply compute $V(s)$ using $V(s')$, by doing this, we can go over each $(s, a, s')$ only once. And this method is called dynamic programming.
 
 ### 2c. Question
 
