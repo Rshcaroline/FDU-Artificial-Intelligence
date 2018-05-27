@@ -1,6 +1,7 @@
 import util, math, random
 from collections import defaultdict
 from util import ValueIteration
+from util import simulate, RLAlgorithm, FixedRLAlgorithm
 
 
 ############################################################
@@ -212,10 +213,37 @@ def identityFeatureExtractor(state, action):
 # Small test case
 smallMDP = BlackjackMDP(cardValues=[1, 5], multiplicity=2, threshold=10, peekCost=1)
 
+# rl = QLearningAlgorithm(smallMDP.actions, smallMDP.discount(), identityFeatureExtractor, explorationProb=0)
+# util.simulate(smallMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)
+# smallMDP.computeStates()
+# policy_rl={}
+# for s in smallMDP.states:
+#     policy_rl[s]=rl.getAction(s)
+#
+# val = util.ValueIteration()
+# val.solve(smallMDP)
+# policy_val=val.pi
+#
+# intersection = [1 if policy_rl[k] == policy_val[k] else 0 for k in policy_rl ]
+# print float(sum(intersection))/len(policy_rl)
+
 # Large test case
 largeMDP = BlackjackMDP(cardValues=[1, 3, 5, 8, 10], multiplicity=3, threshold=40, peekCost=1)
 largeMDP.computeStates()
 
+# rl = QLearningAlgorithm(largeMDP.actions, largeMDP.discount(), identityFeatureExtractor, explorationProb=0)
+# util.simulate(largeMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)
+# largeMDP.computeStates()
+# policy_rl={}
+# for s in largeMDP.states:
+#     policy_rl[s]=rl.getAction(s)
+#
+# val = util.ValueIteration()
+# val.solve(largeMDP)
+# policy_val=val.pi
+#
+# intersection = [1 if policy_rl[k] == policy_val[k] else 0 for k in policy_rl ]
+# print float(sum(intersection))/len(policy_rl)
 
 
 ############################################################
@@ -253,3 +281,22 @@ originalMDP = BlackjackMDP(cardValues=[1, 5], multiplicity=2, threshold=10, peek
 
 # New threshold
 newThresholdMDP = BlackjackMDP(cardValues=[1, 5], multiplicity=2, threshold=15, peekCost=1)
+
+# # Run value iteration on originalMDP to compute an optimal policy.
+# val = util.ValueIteration()
+# val.solve(originalMDP)
+# policy_val=val.pi
+#
+# # Then apply your policy to newThresholdMDP by calling simulate with FixedRLAlgorithm,
+# # instantiated using your computed policy.
+# rl = FixedRLAlgorithm(policy_val)
+# print(sum(util.simulate(newThresholdMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)))
+#
+# # What happens if you run Q learning on newThresholdMDP instead?
+# rl = QLearningAlgorithm(newThresholdMDP.actions, newThresholdMDP.discount(), identityFeatureExtractor, explorationProb=0)
+# newThresholdMDP.computeStates()
+# policy_rl={}
+# for s in newThresholdMDP.states:
+#     policy_rl[s]=rl.getAction(s)
+#
+# print(sum(util.simulate(newThresholdMDP, rl, numTrials=30000, maxIterations=1000, verbose=False, sort=False)))
