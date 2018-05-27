@@ -90,11 +90,44 @@ Other non-terminal states' optimal policy is $\pi_{opt}(-1)=-1$, $\pi_{opt}(0)=+
 
 Suppose we have an acyclic MDP (you will not visit a state a second time in this process). We could run value iteration, which would require multiple iterations. Briefly explain a more efficient algorithm that only requires one pass over all the triples. 
 
-### 2b. Answer
+### ==2b. Answer==
 
 ### 2c. Question
 
+Suppose we have an MDP with states a discount factor $\gamma<1$, but we have an MDP solver that only can solve MDPs with discount 1. How can leverage the MDP solver to solve the original MDP? 
 
+### 2c. Answer
 
+$$
+\begin{aligned}
+T'(s,a,s')&=\gamma T(s,a,s'), \,\, s'\in States \\
+T'(s,a,o)&=1-\gamma \sum_{s'} T(s,a,s')=1-\gamma\\
+Reward'(s,a,s')&=\frac{1}{\gamma} Reward(s,a,s'),\,\, s'\in States \\
+Reward'(s,a,o)&=0\\
+\end{aligned}
+$$
 
+## PROBLEM 3: PEEKING BLACKJACK 
+
+### 3a. Check my Code.
+
+### 3b. Check my Code.
+
+## PROBLEM 4: LEARNING TO PLAY BLACKJACK
+
+### 4a. Check my Code.
+
+### 4b. Question
+
+Call simulate using your algorithm and the identityFeatureExtractor() on the MDP smallMDP, with 30000 trials. Compare the policy learned in this case to the policy learned by value iteration. Don't forget to set the explorationProb of your Q-learning algorithm to 0 after learning the policy. How do the two policies compare (i.e., for how many states do they produce a different action)? Now run simulate() on largeMDP. How does the policy learned in this case compare to the policy learned by value iteration? What went wrong? 
+
+### 4b. Answer
+
+### 4c. Check my Code.
+
+### 4d. Question
+
+Now let's explore the way in which value iteration responds to a change in the rules of the MDP. Run value iteration on originalMDP to compute an optimal policy. Then apply your policy to newThresholdMDP by calling simulate with FixedRLAlgorithm, instantiated using your computed policy. What reward do you get? What happens if you run Q learning on newThresholdMDP instead? Explain. 
+
+### 4d. Answer
 
