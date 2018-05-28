@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4265553e-9c92-4d7b-bb85-9df1b703a289" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/FDU-Artificial-Intelligence.iml" afterPath="$PROJECT_DIR$/.idea/FDU-Artificial-Intelligence.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Projects/PJ2 - N Queens/requirement.pdf" afterPath="$PROJECT_DIR$/Projects/PJ2 - N Queens/requirement.pdf" />
+      <change beforePath="$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI-template.py" afterPath="$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI-template.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,47 +19,40 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="abPruning.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Labs/OJ2/abPruning.py">
+      <file leaf-file-name="AI-template.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI-template.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="16" column="26" lean-forward="false" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
-              <folding />
+            <state relative-caret-position="1838">
+              <caret line="152" column="17" lean-forward="true" selection-start-line="152" selection-start-column="17" selection-end-line="152" selection-end-column="17" />
+              <folding>
+                <element signature="e#230#243#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="submission.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/submission.py">
+      <file leaf-file-name="pisqpipe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/pisqpipe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1140">
-              <caret line="60" column="18" lean-forward="false" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="grader.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/grader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="20" column="19" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="run_p1.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/run_p1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="1235">
+              <caret line="66" column="29" lean-forward="true" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+              <folding>
+                <element signature="e#122#132#0" expanded="true" />
+                <marker date="1523912570000" expanded="true" signature="1424:1532" ph="..." />
+                <marker date="1523912570000" expanded="true" signature="1730:1831" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -80,6 +71,9 @@
         <option value="$PROJECT_DIR$/Labs/OJ2/abPruning-template.py" />
         <option value="$PROJECT_DIR$/Labs/OJ2/abPruning.py" />
         <option value="$PROJECT_DIR$/Projects/PJ2 - N Queens/code/submission.py" />
+        <option value="$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI1.py" />
+        <option value="$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/pisqpipe.py" />
+        <option value="$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI-template.py" />
       </list>
     </option>
   </component>
@@ -89,7 +83,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="42" />
     <option name="y" value="22" />
     <option name="width" value="1398" />
@@ -110,6 +104,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -126,20 +121,43 @@
               <item name="FDU-Artificial-Intelligence" type="b2602c69:ProjectViewProjectNode" />
               <item name="FDU-Artificial-Intelligence" type="462c0819:PsiDirectoryNode" />
               <item name="Projects" type="462c0819:PsiDirectoryNode" />
-              <item name="PJ2 - N Queens" type="462c0819:PsiDirectoryNode" />
+              <item name="Gomoku Competition" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="FDU-Artificial-Intelligence" type="b2602c69:ProjectViewProjectNode" />
               <item name="FDU-Artificial-Intelligence" type="462c0819:PsiDirectoryNode" />
               <item name="Projects" type="462c0819:PsiDirectoryNode" />
-              <item name="PJ2 - N Queens" type="462c0819:PsiDirectoryNode" />
+              <item name="Gomoku Competition" type="462c0819:PsiDirectoryNode" />
+              <item name="pbrain-pyrandom-master" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FDU-Artificial-Intelligence" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FDU-Artificial-Intelligence" type="462c0819:PsiDirectoryNode" />
+              <item name="Projects" type="462c0819:PsiDirectoryNode" />
+              <item name="Gomoku Competition" type="462c0819:PsiDirectoryNode" />
+              <item name="references" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FDU-Artificial-Intelligence" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FDU-Artificial-Intelligence" type="462c0819:PsiDirectoryNode" />
+              <item name="Projects" type="462c0819:PsiDirectoryNode" />
+              <item name="Gomoku Competition" type="462c0819:PsiDirectoryNode" />
+              <item name="references" type="462c0819:PsiDirectoryNode" />
               <item name="code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FDU-Artificial-Intelligence" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FDU-Artificial-Intelligence" type="462c0819:PsiDirectoryNode" />
+              <item name="Projects" type="462c0819:PsiDirectoryNode" />
+              <item name="Gomoku Competition" type="462c0819:PsiDirectoryNode" />
+              <item name="references" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="GomokuAgent-master" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -147,7 +165,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -249,7 +267,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="44" y="22" width="1396" height="878" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -257,10 +276,10 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32950193" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2533235" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20958512" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -280,10 +299,44 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Labs/OJ2/abPruning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="16" column="26" lean-forward="false" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/run_p1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/grader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="20" column="19" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/submission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1140">
+          <caret line="60" column="18" lean-forward="false" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Labs/OJ2/abPruning.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -304,14 +357,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Labs/OJ2/abPruning.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
+        <state relative-caret-position="0">
           <caret line="16" column="26" lean-forward="false" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/submission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="695">
+          <caret line="83" column="18" lean-forward="false" selection-start-line="83" selection-start-column="18" selection-end-line="83" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/run_p1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="32" lean-forward="true" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -324,19 +392,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/run_p1.py">
+    <entry file="file://$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="6" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Projects/PJ2 - N Queens/code/submission.py">
+    <entry file="file://$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/pisqpipe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="60" column="18" lean-forward="false" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
+        <state relative-caret-position="1235">
+          <caret line="66" column="29" lean-forward="true" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+          <folding>
+            <element signature="e#122#132#0" expanded="true" />
+            <marker date="1523912570000" expanded="true" signature="1424:1532" ph="..." />
+            <marker date="1523912570000" expanded="true" signature="1730:1831" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/Gomoku Competition/references/code/GomokuAgent-master/AI0.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Projects/Gomoku Competition/pbrain-pyrandom-master/AI-template.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1838">
+          <caret line="152" column="17" lean-forward="true" selection-start-line="152" selection-start-column="17" selection-end-line="152" selection-end-column="17" />
+          <folding>
+            <element signature="e#230#243#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
