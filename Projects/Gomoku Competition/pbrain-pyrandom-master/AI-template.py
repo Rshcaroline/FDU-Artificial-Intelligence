@@ -2,7 +2,7 @@ import random
 import pisqpipe as pp
 from pisqpipe import DEBUG_EVAL, DEBUG
 
-pp.infotext = 'name="shran", author="Shihan Ran", version="1.0", country="China"'
+pp.infotext = 'name="AI-template", author="Shihan Ran", version="1.0", country="China"'
 
 # The board has 20x20 squares
 MAX_BOARD = 20
@@ -73,6 +73,9 @@ def brain_takeback(x, y):
 	return 2
 
 def brain_turn():
+    """
+    Write your strategies here.
+    """
 	if pp.terminateAI:
 		return
 	i = 0
@@ -92,9 +95,15 @@ def brain_end():
 	pass
 
 def brain_about():
+    """
+    Print copyright.
+    """
 	pp.pipeOut(pp.infotext)
 
 if DEBUG_EVAL:
+    """
+    For debugging.
+    """
 	import win32gui
 	def brain_eval(x, y):
 		# TODO check if it works as expected
