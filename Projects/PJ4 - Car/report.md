@@ -79,8 +79,6 @@ You can also derive the above conclusion from the formula.
 
 ### 3a. Check my Code.
 
-### 3b. Check my Code.
-
 ## PROBLEM 4: LEARNING TO PLAY BLACKJACK
 
 ### 4a. Check my Code.
@@ -108,7 +106,3 @@ Now let's explore the way in which value iteration responds to a change in the r
 I get relatively low sum rewards **205393** for FixedRLAlgorithm because I passed the policy learned for originalMDP in it. Since FixedRLAlgorithm can not adapt, the actions taken are not optimal actions for newThresholdMDP. 
 
 Q­learning has higher sum rewards **360000** because it is able to adapt to newThresholdMDP. 
-
-## Problem 5
-
-![image-20180601163043906](/Users/ranshihan/Coding/FDU-Artificial-Intelligence/Projects/PJ4 - Car/report pic/image-20180601163043906.png)
