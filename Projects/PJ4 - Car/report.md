@@ -71,38 +71,11 @@ Set $\epsilon=0$. Hence $P(C_t\mid C_{t-1})=1, when\,C_t=C_{t-1}$. Thus the valu
 
 You can also derive the above conclusion from the formula.
 
-## PROBLEM 2: TRANSFORMING MDPS
+## PROBLEM 2: Emission probabilities
 
 ### 2a. Check my Code.
 
-### 2b. Question
-
-Suppose we have an acyclic MDP (you will not visit a state a second time in this process). We could run value iteration, which would require multiple iterations. Briefly explain a more efficient algorithm that only requires one pass over all the triples. 
-
-### 2b. Answer
-
-Recall the *value iteration* formula:
-$$
-V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s,a,s') [R(s,a,s')+\gamma V_k(s')]
-$$
-The reason why value iteration requires multiple iterations is that we don't have an specific order over states. If we have an acyclic MDP and we will not visit a state a second time in this process, we can derive a specific tree structure which represents the order of states. So we can simply compute $V(s)$ using $V(s')$, by doing this, we can go over each $(s, a, s')$ only once. And this method is called dynamic programming.
-
-### 2c. Question
-
-Suppose we have an MDP with states a discount factor $\gamma<1$, but we have an MDP solver that only can solve MDPs with discount 1. How can leverage the MDP solver to solve the original MDP? 
-
-### 2c. Answer
-
-$$
-\begin{aligned}
-T'(s,a,s')&=\gamma T(s,a,s'), \,\, s'\in States \\
-T'(s,a,o)&=1-\gamma \sum_{s'} T(s,a,s')=1-\gamma\\
-Reward'(s,a,s')&=\frac{1}{\gamma} Reward(s,a,s'),\,\, s'\in States \\
-Reward'(s,a,o)&=0\\
-\end{aligned}
-$$
-
-## PROBLEM 3: PEEKING BLACKJACK 
+## PROBLEM 3: Transition probabilities 
 
 ### 3a. Check my Code.
 
