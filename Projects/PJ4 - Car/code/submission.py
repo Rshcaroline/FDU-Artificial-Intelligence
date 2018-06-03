@@ -235,12 +235,13 @@ class ParticleFilter(object):
     def elapseTime(self):
         # BEGIN_YOUR_CODE (our solution is 6 lines of code, but don't worry if you deviate from this)
         # raise Exception("Not implemented yet")
-        allParticles = collections.defaultdict(int)
-        for tile in self.particles:
-            for i in range(self.particles[tile]):
-                nextParticle = util.weightedRandomChoice(self.transProbDict[tile])
-                allParticles[nextParticle] = allParticles[nextParticle] + 1 if nextParticle in allParticles else 1
-        self.particles = allParticles
+        updateDict = collections.defaultdict(int)
+        for particle in self.particles:
+            for i in range(self.particles[particle]):
+                # sample a new particle, transition probabilities is now using |self.transProbDict|
+                newParticle = util.weightedRandomChoice(self.transProbDict[particle])
+                updateDict[newParticle] += 1 if newParticle in updateDict else 1
+        self.particles = updateDict
         # END_YOUR_CODE
 
     # Function: Get Belief

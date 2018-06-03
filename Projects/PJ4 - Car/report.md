@@ -82,27 +82,3 @@ You can also derive the above conclusion from the formula.
 ## PROBLEM 4: LEARNING TO PLAY BLACKJACK
 
 ### 4a. Check my Code.
-
-### 4b. Question
-
-Call *simulate()* using your algorithm and the *identityFeatureExtractor()* on the MDP *smallMDP*, with 30000 trials. Compare the policy learned in this case to the policy learned by value iteration. Don't forget to set the explorationProb of your Q-learning algorithm to 0 after learning the policy. How do the two policies compare (i.e., for how many states do they produce a different action)? Now run *simulate()* on *largeMDP*. How does the policy learned in this case compare to the policy learned by value iteration? What went wrong? 
-
-### 4b. Answer
-
-|                                              | Small MDP                                                    | Large MDP                                                    |
-| -------------------------------------------- | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| Value Iteration                              | 5                                                            | 15                                                           |
-| Intersection probabilitiy between 2 policies | 0.74                                                         | 0.67                                                         |
-| Reasons                                      | Since the relatively small state space allows Q­learning algorithm to learn the Q values better, Q­learning does better than value iteration. | Since the state space is much lager, which make Q­learning algorithm not capable of learning accurate Q values. Also, our implemented *identityFeatureExtractor* can only return a singleton list containing indicator feature for the (state, action) pair and it provides no generalization. |
-
-### 4c. Check my Code.
-
-### 4d. Question
-
-Now let's explore the way in which value iteration responds to a change in the rules of the MDP. Run value iteration on originalMDP to compute an optimal policy. Then apply your policy to newThresholdMDP by calling simulate with FixedRLAlgorithm, instantiated using your computed policy. What reward do you get? What happens if you run Q learning on newThresholdMDP instead? Explain. 
-
-### 4d. Answer
-
-I get relatively low sum rewards **205393** for FixedRLAlgorithm because I passed the policy learned for originalMDP in it. Since FixedRLAlgorithm can not adapt, the actions taken are not optimal actions for newThresholdMDP. 
-
-Q­learning has higher sum rewards **360000** because it is able to adapt to newThresholdMDP. 
