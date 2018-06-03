@@ -183,7 +183,32 @@ class ParticleFilter(object):
     ############################################################
     def observe(self, agentX, agentY, observedDist):
         # BEGIN_YOUR_CODE (our solution is 12 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        # raise Exception("Not implemented yet")
+        # Begin reweight
+        # Initialize the update particles Dict randomly
+        updateDict = collections.defaultdict(int)
+        for particle in self.particles:
+            # Think of the particle distribution as the unnormalized posterior probability
+            posterior = self.particles[particle]
+            (row, col) = particle
+            # To convert from a tile to a location
+            X, Y = util.colToX(col), util.rowToY(row)
+            # mean = ||At - Ct||, At is your car's position
+            # Ct represents the actual location of the single other car
+            mean = math.sqrt((agentX - X) ** 2 + (agentY - Y) ** 2)
+            # Use util.pdf(mean, std, value) to compute the probability density function (PDF)
+            # of a Gaussian with given mean and standard deviation, evaluated at value
+            condition = util.pdf(mean, Const.SONAR_STD, observedDist)
+            # Update P = P*P(dt|ct)
+            updateDict[particle] = posterior * condition
+
+        # Begin resample
+        # Initialize the particles randomly
+        self.particles = collections.defaultdict(int)
+        # Create |self.NUM_PARTICLES| new particles during resampling.
+        for i in range(self.NUM_PARTICLES):
+            newParticle = util.weightedRandomChoice(updateDict)
+            self.particles[newParticle] += 1
         # END_YOUR_CODE
         self.updateBelief()
 
@@ -209,7 +234,13 @@ class ParticleFilter(object):
     ############################################################
     def elapseTime(self):
         # BEGIN_YOUR_CODE (our solution is 6 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        # raise Exception("Not implemented yet")
+        allParticles = collections.defaultdict(int)
+        for tile in self.particles:
+            for i in range(self.particles[tile]):
+                nextParticle = util.weightedRandomChoice(self.transProbDict[tile])
+                allParticles[nextParticle] = allParticles[nextParticle] + 1 if nextParticle in allParticles else 1
+        self.particles = allParticles
         # END_YOUR_CODE
 
     # Function: Get Belief
