@@ -108,12 +108,49 @@ def brain_random():
         pp.pipeOut("DEBUG {} coordinates didn't hit an empty field".format(i))
     pp.do_mymove(x, y)
 
+
+class brain_MCTS(object):
+    """
+    AI player.
+    """
+
+    def __init__(self, time=pp.info_timeout_turn, max_actions=1000):
+        # do some parameters initialize
+        self.calculation_time = float(time/1000)        
+        self.max_actions = max_actions              # max simulations times
+        self.confident = 1.96
+        self.equivalence = 10000                    # calc beta
+        self.max_depth = 1
+
+
+    def get_actions(self):
+        # import packages
+        import copy
+        import time
+        from random import choice, shuffle
+        from math import log, sqrt
+
+        # do some parameters initialize
+        simulations = 0    
+        begin = time.time()    # record time, we can't exceed the restricted time
+
+
+        # dicts for simulation recording
+        plays = {}         # key:(player, move), value:visited times
+        wins = {}          # key:(player, move), value:win times
+        plays_rave = {}    # key:move, value:visited times
+        wins_rave = {}     # key:move, value:{player: win times}
+
+        
+
 def brain_turn():
     """
     Choose your move and call do_mymove(x,y), 0 <= x < width, 0 <= y < height.
     Write your strategies here.
     """
     pass
+    
+
 
 
 def brain_end():
