@@ -5,6 +5,8 @@ typora-copy-images-to: ./report pic
 # Car
 
 > Author: Shihan Ran, 15307130424
+>
+> Environment: Mac OS
 
 ## Problem 1: Warmup
 
