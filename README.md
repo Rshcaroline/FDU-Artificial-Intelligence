@@ -16,6 +16,7 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 * [1. Uniform Cost Search](#11)
 * [2. Alpha-Beta pruning](#12)
 * [3. Reinforcement Learning](#13)
+* [4. BayesNet](#14)
 
 
 
@@ -83,3 +84,9 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 <h3 id="13">Lab 3. Reinforcement Learning</h3>
 
 - Implement a framed reinforcement learning code and complete online judge.
+
+
+
+<h3 id="14">Lab 4. BayesNet</h3>
+
+- Implement a framed BayesNet code and complete online judge.
