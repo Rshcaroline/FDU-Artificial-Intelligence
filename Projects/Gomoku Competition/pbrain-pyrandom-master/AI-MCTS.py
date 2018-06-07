@@ -13,8 +13,9 @@ from pisqpipe import DEBUG_EVAL, DEBUG
 pp.infotext = 'name="AI-template", author="Shihan Ran", version="1.0", country="China"'
 
 MAX_BOARD = 100
+his_moves = []         # a list recording history moves
+his_players = []       # a list recording history players
 board = [[0 for i in range(MAX_BOARD)] for j in range(MAX_BOARD)]
-
 
 def brain_init():
     """
@@ -46,12 +47,22 @@ def isFree(x, y):
     return x >= 0 and y >= 0 and x < pp.width and y < pp.height and board[x][y] == 0
 
 
+def brain_update(x, y, player):
+    """
+    A function written by me.
+    Update board, his_moves, his_players.
+    """
+    board[x][y] = player
+    his_moves.append((x,y))
+    his_players.append(player)
+
+
 def brain_my(x, y):
     """
     I take a move.
     """
     if isFree(x,y):
-        board[x][y] = 1
+        brain_update(x, y, 1)
     else:
         pp.pipeOut("ERROR my move [{},{}]".format(x, y))
 
@@ -61,7 +72,7 @@ def brain_opponents(x, y):
     Opponents take a move.
     """
     if isFree(x,y):
-        board[x][y] = 2
+        brain_update(x, y, 2)
     else:
         pp.pipeOut("ERROR opponents's move [{},{}]".format(x, y))
 
@@ -116,41 +127,118 @@ class brain_MCTS(object):
 
     def __init__(self, time=pp.info_timeout_turn, max_actions=1000):
         # do some parameters initialize
-        self.calculation_time = float(time/1000)        
-        self.max_actions = max_actions              # max simulations times
-        self.confident = 1.96
-        self.equivalence = 10000                    # calc beta
+        self.player = 1 if his_players[-1]==2 else 2      # if the last move is done by player2
+        self.calculation_time = float(time/1000)          # unit: s    
+        self.max_actions = max_actions                    # max simulations times
+        self.confident = 1.96      
+        self.equivalence = 10000                          # calc beta
         self.max_depth = 1
 
+        # dicts for simulation recording
+        self.plays = {}         # key:(player, move), value:visited times
+        self.wins = {}          # key:(player, move), value:win times
+        self.plays_rave = {}    # key:move, value:visited times
+        self.wins_rave = {}     # key:move, value:{player: win times}
 
-    def get_actions(self):
+
+    def get_action(self):
         # import packages
         import copy
         import time
-        from random import choice, shuffle
-        from math import log, sqrt
 
         # do some parameters initialize
         simulations = 0    
         begin = time.time()    # record time, we can't exceed the restricted time
+        while time.time() - begin < self.calculation_time:
+            board_copy = copy.deepcopy(board)    # simulation will change board's states
+            his_moves_copy = copy.deepcopy(his_moves)
+            his_players_copy = copy.deepcopy(his_players)
+            self.run_simulation(board_copy, his_moves_copy, his_players_copy)
+            simulations += 1
+
+        action = self.select_one_move()
+        return action
 
 
-        # dicts for simulation recording
-        plays = {}         # key:(player, move), value:visited times
-        wins = {}          # key:(player, move), value:win times
-        plays_rave = {}    # key:move, value:visited times
-        wins_rave = {}     # key:move, value:{player: win times}
+    def run_simulation(self, board_copy, his_moves_copy, his_players_copy):
+        """
+        MCTS main process
+        """
+        # import packages
+        from random import choice, shuffle
+        from math import log, sqrt
+        import itertools
+
+        # parameter initialize
+        plays = self.plays
+        wins = self.wins
+        plays_rave = self.plays_rave
+        wins_rave = self.wins_rave
+
+        player = 1 if his_players[-1]==2 else 2
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        visited_states = set()
+        winner = -1
+        expand = True
+
+        # Simulation begin, we will go through max_actions times simulations
+        for t in range(1, self.max_actions + 1):
+            # Step1: Selection
+            # If all moves have statistics info, choose one that have max UCB value
+            if all(plays.get((player, move)) for move in availables):
+                value, move = max(
+                    ((1 - sqrt(self.equivalence / (3 * plays_rave[move] + self.equivalence))) * 
+                    (wins[(player, move)] / plays[(player, move)]) +
+                     sqrt(self.equivalence / (3 * plays_rave[move] + self.equivalence)) * 
+                     (wins_rave[move][player] / plays_rave[move]) +
+                     sqrt(self.confident * log(plays_rave[move]) / plays[(player, move)]), move)
+                    for move in availables)    # UCT RAVE
+            else:
+                # a simple strategy
+                # prefer to choose the nearer moves without statistics,
+                # and then the farthers.
+                # try to add statistics info to all moves quickly
+                adjacents = []
+                if len(availables) > 5:
+                    adjacents = self.adjacent_moves(board, player, plays)
+
+                if len(adjacents):
+                    move = choice(adjacents)
+                else:
+                    peripherals = []
+                    for move in availables:
+                        if not plays.get((player, move)):
+                            peripherals.append(move)
+                    move = choice(peripherals)
+
+            board_copy[move[0]][move[1]] = player
+            his_moves_copy.append((move[0],move[1]))
+            his_players_copy.append(player)
+
+
+    def select_one_move(self):
+        pass
+
+
+    def adjacent_moves(self, board, player, plays):
+        pass
+
+
 
         
-
 def brain_turn():
     """
     Choose your move and call do_mymove(x,y), 0 <= x < width, 0 <= y < height.
     Write your strategies here.
     """
-    pass
+    if not his_moves:      # the board is empty, place a move at center
+        pp.do_mymove(pp.width/2 + 1, pp.height/2 + 1)
     
+    if pp.terminateAI:     # the game is over
+        return
 
+    AI = brain_MCTS(time=pp.info_timeout_turn, max_actions=1000)
+    pp.do_mymove(AI.get_action())
 
 
 def brain_end():
