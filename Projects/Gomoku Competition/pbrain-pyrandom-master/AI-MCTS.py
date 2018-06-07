@@ -234,26 +234,93 @@ class brain_MCTS(object):
             visited_states.add((player, move))
 
             is_full = not len(availables)
-            win, winner = self.has_a_winner(board_copy)
+            win, winner = self.has_a_winner(his_players_copy)
             if is_full or win:
                 break
 
             player = 1 if his_players_copy[-1]==2 else 2
-
-
+        
+        # Step4: Back-propagation
+        for player, move in visited_states:
+            if (player, move) in plays:
+                plays[(player, move)] += 1  # all visited moves
+                if player == winner:
+                    wins[(player, move)] += 1  # only winner's moves
+            if move in plays_rave:
+                plays_rave[move] += 1  # no matter which player
+                if winner in wins_rave[move]:
+                    wins_rave[move][winner] += 1  # each move and every player
 
 
     def select_one_move(self):
-        pass
+        import itertools
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        moves = {}
+        for move in availables:
+            moves[move] = 100*self.wins.get((self.player, move), 0)/self.plays.get((self.player, move), 1)
+        comb = max(zip(moves.values(), moves.keys()))
+        move = comb[1]
+        print(move)
+
+        # Display the statistics for each possible play,
+        # first is MC value, second is AMAF value
+        for x in sorted(
+                ((100 * self.wins.get((self.player, move), 0) /
+                      self.plays.get((self.player, move), 1),
+                  100 * self.wins_rave.get(move, {}).get(self.player, 0) /
+                      self.plays_rave.get(move, 1),
+                  self.wins.get((self.player, move), 0),
+                  self.plays.get((self.player, move), 0),
+                  self.wins_rave.get(move, {}).get(self.player, 0),
+                  self.plays_rave.get(move, 1))
+                  for move in availables),
+                reverse=True):
+            print('{6}: {0:.2f}%--{1:.2f}% ({2} / {3})--({4} / {5})'.format(*x))
+        print(move)
+        return move
 
 
     def adjacent_moves(self, board, player, plays):
-        pass
+        """
+        adjacent moves without statistics info
+        """
+        import itertools
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        moved = list(set([(i, j) for i, j in itertools.product(range(pp.width), range(pp.height))]) - set(availables))
+        adjacents = set()
+        width = pp.width
+        height = pp.height
+
+        for (h, w) in moved:
+            if w < width - 1:
+                adjacents.add((h+1, w))  # right
+            if w > 0:
+                adjacents.add((h-1, w))  # left
+            if h < height - 1:
+                adjacents.add((h, w+1))  # upper
+            if h > 0:
+                adjacents.add((h, w-1))  # lower
+            if w < width - 1 and h < height - 1:
+                adjacents.add((h+1, w+1))  # upper right
+            if w > 0 and h < height - 1:
+                adjacents.add((h-1, w+1))  # upper left
+            if w < width - 1 and h > 0:
+                adjacents.add((h+1, w-1))  # lower right
+            if w > 0 and h > 0:
+                adjacents.add((h-1, w-1))  # lower left
+
+        adjacents = list(set(adjacents) - set(moved))
+        for move in adjacents:
+            if plays.get((player, move)):
+                adjacents.remove(move)
+        return adjacents
     
 
-    def has_a_winner(self, board):
-        pass
-
+    def has_a_winner(self, his_players):
+        if pp.terminateAI:
+            return True, his_players[-1]
+        else:
+            return False, -1
 
 
         
