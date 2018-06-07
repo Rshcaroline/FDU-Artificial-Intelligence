@@ -176,7 +176,7 @@ class brain_MCTS(object):
         wins_rave = self.wins_rave
 
         player = 1 if his_players[-1]==2 else 2
-        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board_copy[i][j]==0]
         visited_states = set()
         winner = -1
         expand = True
@@ -200,7 +200,7 @@ class brain_MCTS(object):
                 # try to add statistics info to all moves quickly
                 adjacents = []
                 if len(availables) > 5:
-                    adjacents = self.adjacent_moves(board, player, plays)
+                    adjacents = self.adjacent_moves(board_copy, player, plays)
 
                 if len(adjacents):
                     move = choice(adjacents)
@@ -214,6 +214,33 @@ class brain_MCTS(object):
             board_copy[move[0]][move[1]] = player
             his_moves_copy.append((move[0],move[1]))
             his_players_copy.append(player)
+            availables.remove((move[0],move[1]))
+
+            # Step2: Expand
+            # add only one new child node each time
+            if expand and (player, move) not in plays:
+                expand = False
+                plays[(player, move)] = 0
+                wins[(player, move)] = 0
+                if move not in plays_rave:
+                    plays_rave[move] = 0
+                if move in wins_rave:
+                    wins_rave[move][player] = 0
+                else:
+                    wins_rave[move] = {player: 0}
+                if t > self.max_depth:
+                    self.max_depth = t
+
+            visited_states.add((player, move))
+
+            is_full = not len(availables)
+            win, winner = self.has_a_winner(board_copy)
+            if is_full or win:
+                break
+
+            player = 1 if his_players_copy[-1]==2 else 2
+
+
 
 
     def select_one_move(self):
@@ -221,6 +248,10 @@ class brain_MCTS(object):
 
 
     def adjacent_moves(self, board, player, plays):
+        pass
+    
+
+    def has_a_winner(self, board):
         pass
 
 
