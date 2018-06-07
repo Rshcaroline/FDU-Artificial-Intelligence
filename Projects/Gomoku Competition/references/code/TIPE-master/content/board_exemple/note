@@ -1,0 +1,3 @@
+mktexlsr
+updmap-sys
+mktexlsr /var/lib/texmf

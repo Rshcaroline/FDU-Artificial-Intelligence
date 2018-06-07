@@ -1,0 +1,17 @@
+Le morpion est un jeu classique dans lequel l'objectif est d'aligner 3 cercles (ou 3 croix) sur une grille de taille 3 x 3. Nous intéressons ici à un jeu généralisé de taille m x n. Dans ce jeu généralisé, le premier joueur place un pion noir sur la grille, puis le second joueur y place un pion blanc et ainsi de suite. Le but est d'aligner k pions de même couleur.
+Afin d'étudier le morpion, nous considérons le jeu comme un (m, n, k)-jeu où m x n est la taille de la grille et k est le nombre de pions dans une ligne pour gagner. Avec l'argument de « voler la stratégie de l'adversaire » établie par Uiterwijk et Henrik [1], s'il existe une stratégie gagnante pour le deuxième joueur, le premier joueur peut placer un pion et puis jouer comme s'il était le deuxième joueur. Ainsi, soit il existe une stratégie gagnante pour le premier joueur, soit une stratégie qui dans le pire des cas mène au match nul. Le (m, n, k)-jeu pour k >= 8 est montré d'être un jeu à égalité [2, 3] en divisant le jeu en plusieurs sous-jeux et en montrant que le premier joueur n'a pas de stratégies gagnantes dans tous ces sous-jeux. Quitte à forcer le second joueur à jouer une certaine place, la méthode Threat space search, détaillé par Allis [4], montre qu'il existe une stratégie gagnante dans le (15, 15, 5)-jeu. Le principe est de forcer le deuxième joueur à placer les pions en certaines places pour alléger le nombre de calculs, puis chercher tous les cas possibles. Les (m, n, 6)-jeux et les (m, n, 7)-jeux restent encore indéterminés [5]. La théorie des jeux donne un algorithme (minimax) [6] pour chercher une stratégie assimilée à la meilleure stratégie. En fin, avec l'élagage alpha-beta [7], nous pouvons améliorer l'algorithme minimax en efficacité.
+
+\bibitem{steal}
+    Uiterwijk, J.W.H.M., Herik, H.J. van den., The advantage of the initiative, Information Sciences, 122 (2000) 43-58.
+\bibitem{9-win}
+    Hales, A.W., Jewett, R.I. (1963). Regularity and positional games. Transactions of the American Mathematical Society 106 222-229.
+\bibitem{8-win}
+    Zetters, T.G.L. Problem S.10 proposed by R.K.Guy and J.L. Selfridge, The American Mathematical Monthly 86 (1979), solution 87 575-576.
+\bibitem{Threat}
+    Allis, L. V. (1994) Searching for solutions in games and artificial intelligence, Ph.D. Thesis. University of Limburg, Maastricht.
+\bibitem{67-win}
+    \url{http://www.weijima.com/index.php?option=com_content&view=article&id=11}
+\bibitem{minimax}
+    Guillermo Owen, (1967) Communications to the Editor-An Elementary Proof of the Minimax Theorem. Management Science 13(9):765-765
+\bibitem{alpha-beta}
+    Stuart Russell, Peter Norvig. Artificial Intelligence-A Modern Approach Prentice Hall (2010) 167-171

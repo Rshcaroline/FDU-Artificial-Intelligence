@@ -1,0 +1,14 @@
+Training data format:
+training_data[0] = first game
+training_data[0][1][0] = first move of first game
+training_data[0][2][0] = second move of first game
+training_data[0][0][1] = winner of first game
+training_data[0][1][0][0] = first line of first move of first game
+training_data[0][1][0][0][0] = first tile on first line of first move of first game
+
+After the training data has been shuffled training data loses the first index above and they're just random moves from any given game
+For example:
+training_data[0][0] = a move of a random game
+training_data[0][1] = winner of the game which the random move was taken from
+training_data[1][0] = another move of a random game
+and so on...

@@ -322,7 +322,6 @@ class brain_MCTS(object):
         else:
             return False, -1
 
-
         
 def brain_turn():
     """
@@ -336,7 +335,8 @@ def brain_turn():
         return
 
     AI = brain_MCTS(time=pp.info_timeout_turn, max_actions=1000)
-    pp.do_mymove(AI.get_action())
+    action = AI.get_action()
+    pp.do_mymove(action[0], action[1])
 
 
 def brain_end():

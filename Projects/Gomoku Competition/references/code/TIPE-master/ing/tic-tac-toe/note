@@ -1,0 +1,29 @@
+# Définition
+jeux non coopératifs, séquentiel, finis, à somme nulle, à information parfaite
+
+# Wiki
+
+# Reference
+L'algorithme de Zermelo
+Théorie des Juex: Introduction à la théorie des Juex répétés. Nicole Berline, Alain Plagne, Claude Sabbah. Les éditions de école polytechnique. 
+
+1. Gloutone: fonction heuristique, bien défini -> bon
+2. Minimax:  approcher
+3. Equilibre de Nash:   
+
+# Syntaxe
+make_matrix -> Array.make_matrix
+make_vect   -> Array.make
+vect_length -> Array.length
+List.length
+random__int -> Random.int
+hd	-> List.hd
+tl	-> List.tl
+Random.init (int_of_float (1000000. *. *Sys.time () )));;
+
+ocamlc base.cmo file.ml -o ouput.out
+
+LV1 : glouton
+LV2 : Failled
+LV3 : copy  (alpha-beta)
+comment tu les as suivi
