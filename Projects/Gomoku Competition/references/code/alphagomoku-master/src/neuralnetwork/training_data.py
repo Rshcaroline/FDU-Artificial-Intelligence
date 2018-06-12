@@ -150,7 +150,7 @@ def _load_or_parse_data(parse_paths: List[str], save_path: str, file_count: int 
 	:param file_count: The amount of training data to return.
 	:return: Parsed training data, one way or another.
 	"""
-	running_on_raptor = False
+	running_on_raptor = True  # False
 	if isfile(save_path) or not running_on_raptor:
 		data = _load_data(save_path)
 	else:

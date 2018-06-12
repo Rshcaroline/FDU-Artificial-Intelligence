@@ -33,13 +33,13 @@ class Neural_Network:
 nodes_created = 0
 
 class Node:
-<<<<<<< HEAD
-	DEFAULT_DEPTH = 0
-	DEFAULT_BREADTH = 4
-=======
+# <<<<<<< HEAD
+	# DEFAULT_DEPTH = 0
+	# DEFAULT_BREADTH = 4
+# =======
 	DEFAULT_DEPTH = 1
 	DEFAULT_BREADTH = 1
->>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
+# >>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
 	DEFAULT_TIME_SECONDS = 5
 	WIN_VALUE = 1
 
@@ -112,26 +112,26 @@ class Node:
 		while (datetime.utcnow() - start_time) < timedelta(seconds=time_seconds):
 			nodes_created = 0
 			self.neural_network.clear_garbage_from_nn()
-<<<<<<< HEAD
-			child = self.select(depth, breadth)
-		for kid in self.children:
-			print(kid.value)
-			print(kid.x)
-			print(kid.y)
-			print("-")
-		print(child.value)
-		print(child.x)
-		print(child.y)
-		# print(datetime.utcnow() - start_time)
-		return child
-=======
+# <<<<<<< HEAD
+		# 	child = self.select(depth, breadth)
+		# for kid in self.children:
+		# 	print(kid.value)
+		# 	print(kid.x)
+		# 	print(kid.y)
+		# 	print("-")
+		# print(child.value)
+		# print(child.x)
+		# print(child.y)
+		# # print(datetime.utcnow() - start_time)
+		# return child
+# =======
 			self.select(depth, breadth)
 			winning = sorted(self.children, key=lambda c:c.value)[-1]
-			print("%r, Time: %ds, Nodes: %r" % (winning._board.get_last_move(), (datetime.utcnow() - start_time).seconds, nodes_created))
-			print()
+			# print("%r, Time: %ds, Nodes: %r" % (winning._board.get_last_move(), (datetime.utcnow() - start_time).seconds, nodes_created))
+			# print()
 		print("Making move %r: %ds" % (winning._board.get_last_move(), (datetime.utcnow() - start_time).seconds))
 		return winning
->>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
+# >>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
 
 	def select(self, depth: int = DEFAULT_DEPTH, breadth: int = DEFAULT_BREADTH) -> "Node":
 		if len(self.children) == 0:
@@ -149,18 +149,18 @@ class Node:
 
 		self.add_child_scores_to_value()
 
-<<<<<<< HEAD
-		children_to_explore = sorted(children_to_explore, key=lambda child: child.get_value(), reverse=True)
-		print("whores")
-		print(self.x)
-		print(self.y)
-		print("[")
-		for kid in children_to_explore:
-			print(kid.value)
-		print("]")
-=======
+# <<<<<<< HEAD
+		# children_to_explore = sorted(children_to_explore, key=lambda child: child.get_value(), reverse=True)
+		# print("whores")
+		# print(self.x)
+		# print(self.y)
+		# print("[")
+		# for kid in children_to_explore:
+		# 	print(kid.value)
+		# print("]")
+# =======
 		children_to_explore = sorted(children_to_explore, key=lambda child: child.value, reverse=True)
->>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
+# >>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
 		return children_to_explore[0] if children_to_explore else None
 
 	def negate_score_for_opponent_node(self, v: int) -> int:
@@ -169,14 +169,14 @@ class Node:
 		return v
 
 	def add_child_scores_to_value(self):
-<<<<<<< HEAD
-		self.value = self.set_default_value()
-		self.value = ((self.value * 0.5) + (sum(c.value for c in self.children) * 0.5)) / (len(self.children) + 1)
-		self.negate_score_for_opponent_node()
-=======
+# <<<<<<< HEAD
+		# self.value = self.set_default_value()
+		# self.value = ((self.value * 0.5) + (sum(c.value for c in self.children) * 0.5)) / (len(self.children) + 1)
+		# self.negate_score_for_opponent_node()
+# =======
 		self.value = (self._default_value + sum(c.value for c in self.children)) / (len(self.children) + 1)
 		self.value = self.negate_score_for_opponent_node(self.value)
->>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
+# >>>>>>> 8543d584518b4ed9d95ac3dfac1e6821a56a3e19
 
 	def check_for_winning_node(self) -> "Node":
 		for child in self.children:
@@ -184,7 +184,7 @@ class Node:
 				return child
 
 	def get_playable_moves(self, played_moves: list) -> list:
-		print(played_moves)
+		# print(played_moves)
 		if len(played_moves) > 0:
 			moves = self.get_adjacent_moves(played_moves)
 		else:
