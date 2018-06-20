@@ -1,11 +1,9 @@
 # Artificial Intelligence @ FDU
 This is a repo including all projects and labs in my [Artificial Intelligence course (DATA130008.01)](http://www.sdspeople.fudan.edu.cn/zywei/DATA130008/index.html) in [School of Data Science](http://www.sds.fudan.edu.cn/wp/) @[Fudan University](http://www.fudan.edu.cn/2016/index.html).
 
+[There](https://github.com/Rshcaroline/FDU-Artificial-Intelligence/blob/master/artificial-intelligence.pdf) is a cheat sheet of this course, and you can have a brief look about what we learn this term.
+
 *NOTICE:* Requirements and code listed may be outdated, please refer to [course website](http://www.sdspeople.fudan.edu.cn/zywei/DATA130008/index.html) to see latest news.
-
-
-
- 
 
 
 
