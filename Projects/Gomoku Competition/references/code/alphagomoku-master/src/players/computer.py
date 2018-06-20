@@ -37,8 +37,6 @@ class Computer:
 		self.node = self.node.get_play()
 		x, y = self.node.get_move()
 
-
-
 		return x, y
 
 	def is_new_game(self) -> bool:

@@ -3,6 +3,12 @@ This is a repo including all projects and labs in my [Artificial Intelligence co
 
 *NOTICE:* Requirements and code listed may be outdated, please refer to [course website](http://www.sdspeople.fudan.edu.cn/zywei/DATA130008/index.html) to see latest news.
 
+
+
+ 
+
+
+
 ## Projects
 
 * [1. Search in Pac-Man](#1)
