@@ -17,6 +17,7 @@ his_moves = []         # a list recording history moves
 his_players = []       # a list recording history players
 board = [[0 for i in range(MAX_BOARD)] for j in range(MAX_BOARD)]
 
+
 def brain_init():
     """
     Initiate the board, the board size must be in set [5, MAX_BOARD].
@@ -99,6 +100,246 @@ def brain_takeback(x, y):
     return 2
 
 
+class brain_MCTS(object):
+    """
+    AI player.
+    """
+    def __init__(self, time=pp.info_timeout_turn, max_actions=1000):
+        # do some parameters initialize
+        self.player = 1 if his_players[-1]==2 else 2      # if the last move is done by player2
+        self.calculation_time = float(time/1000)          # unit: s    
+        self.max_actions = max_actions                    # max simulations times
+        self.confident = 1.96      
+        self.equivalence = 10000                          # calc beta
+        self.max_depth = 1
+
+        # dicts for simulation recording
+        self.plays = {}         # key:(player, move), value:visited times
+        self.wins = {}          # key:(player, move), value:win times
+        self.plays_rave = {}    # key:move, value: visited times
+        self.wins_rave = {}     # key:move, value: {player: win times}
+
+
+    def get_action(self):
+        # import packages
+        import copy
+        import time
+        import itertools
+
+        # do some parameters initialize
+        simulations = 0    
+        begin = time.time()    # record time, we can't exceed the restricted time
+        while time.time() - begin < self.calculation_time/15:
+            board_copy = copy.deepcopy(board)    # simulation will change board's states
+            his_moves_copy = copy.deepcopy(his_moves)
+            his_players_copy = copy.deepcopy(his_players)
+            self.run_simulation(board_copy, his_moves_copy, his_players_copy)
+            simulations += 1
+
+        action = self.select_one_move()
+        return action
+
+
+    def run_simulation(self, board_copy, his_moves_copy, his_players_copy):
+        """
+        MCTS main process
+        """
+        # import spackages
+        from random import choice, shuffle
+        from math import log, sqrt
+        import itertools
+
+        # parameter initialize
+        # plays = self.plays
+        # wins = self.wins
+        # plays_rave = self.plays_rave
+        # wins_rave = self.wins_rave
+
+        player = 1 if his_players_copy[-1]==2 else 2
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board_copy[i][j]==0]
+        visited_states = set()
+        winner = -1
+        expand = True
+
+        # Simulation begin, we will go through max_actions times simulations
+        for t in range(1, self.max_actions + 1):
+            # Step1: Selection
+            # If all moves have statistics info, choose one that have max UCB value
+            if all(self.plays.get((player, move)) for move in availables):
+                value, move = max(
+                    ((1 - sqrt(self.equivalence / (3 * self.plays_rave[move] + self.equivalence))) * 
+                    (self.wins[(player, move)] / self.plays[(player, move)]) +
+                    sqrt(self.equivalence / (3 * self.plays_rave[move] + self.equivalence)) * 
+                    (self.wins_rave[move][player] / self.plays_rave[move]) +
+                    sqrt(self.confident * log(self.plays_rave[move]) / self.plays[(player, move)]), move)
+                    for move in availables)    # UCT RAVE
+                # pp.pipeOut("Select Move at [{},{}] with value {}".format(move[0], move[1], value))
+            else:
+            # a simple strategy
+            # prefer to choose the nearer moves without statistics,
+            # and then the farthers.
+            # try to add statistics info to all moves quickly
+            # adjacents = []
+                if len(availables) > 5:
+                    adjacents = self.adjacent_moves(board_copy, player, self.plays)
+
+                if len(adjacents):
+                    # random select one move from adjacents
+                    move = choice(adjacents)
+                    # pp.pipeOut("Random select one move from adjacents at [{},{}]".format(move[0], move[1]))
+                else:
+                    peripherals = []
+                    for move in availables:
+                        if not self.plays.get((player, move)):
+                            peripherals.append(move)
+                    move = choice(peripherals)
+
+            # add one move to the board
+            board_copy[move[0]][move[1]] = player
+            his_moves_copy.append((move[0],move[1]))
+            his_players_copy.append(player)
+            availables.remove((move[0],move[1]))
+
+            # Step2: Expand
+            # add only one new child node each time
+            if expand and (player, move) not in self.plays:
+                expand = False
+                self.plays[(player, move)] = 0
+                self.wins[(player, move)] = 0
+                if move not in self.plays_rave:
+                    self.plays_rave[move] = 0
+                if move in self.wins_rave:
+                    self.wins_rave[move][player] = 0
+                else:
+                    self.wins_rave[move] = {player: 0}
+                if t > self.max_depth:
+                    self.max_depth = t
+
+            visited_states.add((player, move))
+
+            is_full = not len(availables)
+            # win, winner = self.has_a_winner(his_players_copy, his_moves_copy, board_copy)
+            # pp.pipeOut("Player {} wins".format(winner))
+            # if is_full or win:
+                # break
+
+            # update player
+            player = 1 if his_players_copy[-1]==2 else 2
+        
+        # Step4: Back-propagation
+        for player, move in visited_states:
+            if (player, move) in self.plays:
+                self.plays[(player, move)] += 1        # all visited moves
+                if player == winner:
+                    self.wins[(player, move)] += 1     # only winner's moves
+            if move in self.plays_rave:
+                self.plays_rave[move] += 1             # no matter which player
+                if winner in self.wins_rave[move]:
+                    self.wins_rave[move][winner] += 1  # each move and every player
+
+
+    def select_one_move(self):
+        import itertools
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        moves = {}
+        for move in availables:
+            moves[move] = 100*self.wins.get((self.player, move), 0)/self.plays.get((self.player, move), 1)
+        comb = max(zip(moves.values(), moves.keys()))
+        return comb[1]
+
+
+    def adjacent_moves(self, board, player, plays):
+        """
+        Adjacent moves without statistics info
+        This function is right!
+        """
+        import itertools
+        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]!=0]
+        adjacents = set()
+        width = pp.width
+        height = pp.height
+
+        for (h, w) in moved:
+            if h < width - 1:
+                adjacents.add((h+1, w))  # right
+            if h > 0:
+                adjacents.add((h-1, w))  # left
+            if w < height - 1:
+                adjacents.add((h, w+1))  # upper
+            if w > 0:
+                adjacents.add((h, w-1))  # lower
+            if w < width - 1 and h < height - 1:
+                adjacents.add((h+1, w+1))  # upper right
+            if h > 0 and w < height - 1:
+                adjacents.add((h-1, w+1))  # upper left
+            if h < width - 1 and w > 0:
+                adjacents.add((h+1, w-1))  # lower right
+            if w > 0 and h > 0:
+                adjacents.add((h-1, w-1))  # lower left
+
+        adjacents = list(set(adjacents) - set(moved))
+        for move in adjacents:
+            if plays.get((player, move)):
+                adjacents.remove(move)
+        return adjacents
+    
+
+    def has_a_winner(self, his_players, his_moves, board):
+        """
+        This function is wrong.
+        """
+        import itertools
+        moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]!=0]
+        if (len(moved) < 9):  # 5+4 to win
+            return False, -1
+
+        width = pp.width
+        height = pp.height
+
+        n = 4   # need how many pieces in a row to win
+        for w, h in moved:
+            m = his_moves.index((w, h))
+            player = his_players[m]
+
+            if (w in range(width - n + 1) and
+                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n))) == 1):
+                return True, player
+
+            if (h in range(height - n + 1) and
+                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n * width, width))) == 1):
+                return True, player
+
+            if (w in range(width - n + 1) and h in range(height - n + 1) and
+                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width + 1), width + 1))) == 1):
+                return True, player
+
+            if (w in range(n - 1, width) and h in range(height - n + 1) and
+                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width - 1), width - 1))) == 1):
+                return True, player
+
+        return False, -1
+
+        
+def brain_turn():
+    """
+    Choose your move and call do_mymove(x,y), 0 <= x < width, 0 <= y < height.
+    Write your strategies here.
+    """
+
+    import itertools
+    if pp.terminateAI:     # the game is over
+        return
+
+    if not his_moves:      # the board is empty, place a move at center
+        pp.do_mymove(int(pp.width//2), int(pp.height//2))
+
+    # use MCTS to find a move
+    AI = brain_MCTS(time=pp.info_timeout_turn, max_actions=100)
+    action = AI.get_action()
+    pp.do_mymove(*action)
+
+
 def brain_random():
     """
     Randomly take a move.
@@ -118,225 +359,6 @@ def brain_random():
     if i > 1:
         pp.pipeOut("DEBUG {} coordinates didn't hit an empty field".format(i))
     pp.do_mymove(x, y)
-
-
-class brain_MCTS(object):
-    """
-    AI player.
-    """
-
-    def __init__(self, time=pp.info_timeout_turn, max_actions=1000):
-        # do some parameters initialize
-        self.player = 1 if his_players[-1]==2 else 2      # if the last move is done by player2
-        self.calculation_time = float(time/1000)          # unit: s    
-        self.max_actions = max_actions                    # max simulations times
-        self.confident = 1.96      
-        self.equivalence = 10000                          # calc beta
-        self.max_depth = 1
-
-        # dicts for simulation recording
-        self.plays = {}         # key:(player, move), value:visited times
-        self.wins = {}          # key:(player, move), value:win times
-        self.plays_rave = {}    # key:move, value:visited times
-        self.wins_rave = {}     # key:move, value:{player: win times}
-
-
-    def get_action(self):
-        # import packages
-        import copy
-        import time
-
-        # do some parameters initialize
-        simulations = 0    
-        begin = time.time()    # record time, we can't exceed the restricted time
-        while time.time() - begin < self.calculation_time:
-            board_copy = copy.deepcopy(board)    # simulation will change board's states
-            his_moves_copy = copy.deepcopy(his_moves)
-            his_players_copy = copy.deepcopy(his_players)
-            self.run_simulation(board_copy, his_moves_copy, his_players_copy)
-            simulations += 1
-
-        action = self.select_one_move()
-        return action
-
-
-    def run_simulation(self, board_copy, his_moves_copy, his_players_copy):
-        """
-        MCTS main process
-        """
-        # import packages
-        from random import choice, shuffle
-        from math import log, sqrt
-        import itertools
-
-        # parameter initialize
-        plays = self.plays
-        wins = self.wins
-        plays_rave = self.plays_rave
-        wins_rave = self.wins_rave
-
-        player = 1 if his_players[-1]==2 else 2
-        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board_copy[i][j]==0]
-        visited_states = set()
-        winner = -1
-        expand = True
-
-        # Simulation begin, we will go through max_actions times simulations
-        for t in range(1, self.max_actions + 1):
-            # Step1: Selection
-            # If all moves have statistics info, choose one that have max UCB value
-            if all(plays.get((player, move)) for move in availables):
-                value, move = max(
-                    ((1 - sqrt(self.equivalence / (3 * plays_rave[move] + self.equivalence))) * 
-                    (wins[(player, move)] / plays[(player, move)]) +
-                     sqrt(self.equivalence / (3 * plays_rave[move] + self.equivalence)) * 
-                     (wins_rave[move][player] / plays_rave[move]) +
-                     sqrt(self.confident * log(plays_rave[move]) / plays[(player, move)]), move)
-                    for move in availables)    # UCT RAVE
-            else:
-                # a simple strategy
-                # prefer to choose the nearer moves without statistics,
-                # and then the farthers.
-                # try to add statistics info to all moves quickly
-                adjacents = []
-                if len(availables) > 5:
-                    adjacents = self.adjacent_moves(board_copy, player, plays)
-
-                if len(adjacents):
-                    move = choice(adjacents)
-                else:
-                    peripherals = []
-                    for move in availables:
-                        if not plays.get((player, move)):
-                            peripherals.append(move)
-                    move = choice(peripherals)
-
-            board_copy[move[0]][move[1]] = player
-            his_moves_copy.append((move[0],move[1]))
-            his_players_copy.append(player)
-            availables.remove((move[0],move[1]))
-
-            # Step2: Expand
-            # add only one new child node each time
-            if expand and (player, move) not in plays:
-                expand = False
-                plays[(player, move)] = 0
-                wins[(player, move)] = 0
-                if move not in plays_rave:
-                    plays_rave[move] = 0
-                if move in wins_rave:
-                    wins_rave[move][player] = 0
-                else:
-                    wins_rave[move] = {player: 0}
-                if t > self.max_depth:
-                    self.max_depth = t
-
-            visited_states.add((player, move))
-
-            is_full = not len(availables)
-            win, winner = self.has_a_winner(his_players_copy)
-            if is_full or win:
-                break
-
-            player = 1 if his_players_copy[-1]==2 else 2
-        
-        # Step4: Back-propagation
-        for player, move in visited_states:
-            if (player, move) in plays:
-                plays[(player, move)] += 1  # all visited moves
-                if player == winner:
-                    wins[(player, move)] += 1  # only winner's moves
-            if move in plays_rave:
-                plays_rave[move] += 1  # no matter which player
-                if winner in wins_rave[move]:
-                    wins_rave[move][winner] += 1  # each move and every player
-
-
-    def select_one_move(self):
-        import itertools
-        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
-        moves = {}
-        for move in availables:
-            moves[move] = 100*self.wins.get((self.player, move), 0)/self.plays.get((self.player, move), 1)
-        comb = max(zip(moves.values(), moves.keys()))
-        move = comb[1]
-        print(move)
-
-        # Display the statistics for each possible play,
-        # first is MC value, second is AMAF value
-        for x in sorted(
-                ((100 * self.wins.get((self.player, move), 0) /
-                      self.plays.get((self.player, move), 1),
-                  100 * self.wins_rave.get(move, {}).get(self.player, 0) /
-                      self.plays_rave.get(move, 1),
-                  self.wins.get((self.player, move), 0),
-                  self.plays.get((self.player, move), 0),
-                  self.wins_rave.get(move, {}).get(self.player, 0),
-                  self.plays_rave.get(move, 1))
-                  for move in availables),
-                reverse=True):
-            print('{6}: {0:.2f}%--{1:.2f}% ({2} / {3})--({4} / {5})'.format(*x))
-        print(move)
-        return move
-
-
-    def adjacent_moves(self, board, player, plays):
-        """
-        adjacent moves without statistics info
-        """
-        import itertools
-        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
-        moved = list(set([(i, j) for i, j in itertools.product(range(pp.width), range(pp.height))]) - set(availables))
-        adjacents = set()
-        width = pp.width
-        height = pp.height
-
-        for (h, w) in moved:
-            if w < width - 1:
-                adjacents.add((h+1, w))  # right
-            if w > 0:
-                adjacents.add((h-1, w))  # left
-            if h < height - 1:
-                adjacents.add((h, w+1))  # upper
-            if h > 0:
-                adjacents.add((h, w-1))  # lower
-            if w < width - 1 and h < height - 1:
-                adjacents.add((h+1, w+1))  # upper right
-            if w > 0 and h < height - 1:
-                adjacents.add((h-1, w+1))  # upper left
-            if w < width - 1 and h > 0:
-                adjacents.add((h+1, w-1))  # lower right
-            if w > 0 and h > 0:
-                adjacents.add((h-1, w-1))  # lower left
-
-        adjacents = list(set(adjacents) - set(moved))
-        for move in adjacents:
-            if plays.get((player, move)):
-                adjacents.remove(move)
-        return adjacents
-    
-
-    def has_a_winner(self, his_players):
-        if pp.terminateAI:
-            return True, his_players[-1]
-        else:
-            return False, -1
-
-        
-def brain_turn():
-    """
-    Choose your move and call do_mymove(x,y), 0 <= x < width, 0 <= y < height.
-    Write your strategies here.
-    """
-    if not his_moves:      # the board is empty, place a move at center
-        pp.do_mymove(pp.width/2 + 1, pp.height/2 + 1)
-    
-    if pp.terminateAI:     # the game is over
-        return
-
-    AI = brain_MCTS(time=pp.info_timeout_turn, max_actions=1000)
-    action = AI.get_action()
-    pp.do_mymove(action[0], action[1])
 
 
 def brain_end():
