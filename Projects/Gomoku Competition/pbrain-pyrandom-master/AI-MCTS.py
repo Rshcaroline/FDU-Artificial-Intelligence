@@ -100,6 +100,265 @@ def brain_takeback(x, y):
     return 2
 
 
+# start of RT's code
+import itertools
+import re
+from collections import Counter
+whether_start = False
+
+def opponent(player):
+    return 3-player
+
+
+def probable_position(board):
+    """
+    find all position that may be considered as the next action.
+    exist (x,y) not free, such that |x-pos_x|<3, |y-pos_y|<3
+    :param
+        board: the current board state
+    :return:
+        position:  all position may be considered
+    """
+    probable_list = []
+    for (pos_x, pos_y) in itertools.product(range(pp.width), range(pp.height)):
+        if not isFree(pos_x, pos_y):
+            continue
+        for (i,j) in itertools.product(range(5), range(5)):
+            x, y = pos_x - i, pos_y - j
+            if x < 0 or x >= pp.width or y < 0 or y >= pp.height:  # out of the board
+                continue
+            if not isFree(x, y):  # a chess is in the region
+                probable_list.append((pos_x, pos_y))
+                break
+    return probable_list  # prob_list may be empty
+
+
+def renew_probable_position(action, probable_list):
+    """
+    renew the probable list
+    :param
+        action: the position AI or player put at
+        probable_list: the list needed to be renewed
+    :returns
+        a new list
+    """
+    x, y = action[0], action[1]
+
+    for (i, j) in itertools.product(range(5), range(5)):
+        new_x = x - i
+        new_y = y - j
+        if (new_x, new_y) not in probable_list:
+            probable_list.append((new_x, new_y))
+
+    if (x, y) in probable_list:
+        probable_list.remove((x, y))
+
+    return probable_list
+
+
+def extend_board(player, board):
+    """
+    add an edge for the board
+    :param
+        player: to extract whose feature (then the edge is 3-player)
+        board:
+    :return
+        new_board: extended board
+    """
+    new_board = [[board[x-1][y-1] if 0 < x < pp.width + 2 and 0 < y < pp.height + 2 else 3-player \
+                  for x in range(pp.width + 2)] for y in range(pp.height + 2)]
+    return new_board
+
+
+def is_special_class(array, color):
+    """
+    judge whether the several chess given in the list form a special class
+    :param
+        array: the board of gomoku
+        color: the index of color, 1: black, 2: white
+    :return:
+        Counter: ({class: num of this class}, ...)
+    """
+
+    # add judgement here. Details in 'http://zjh776.iteye.com/blog/1979748'
+
+    def _black_color(array):
+        height, width = len(array), len(array[0])
+        for i in range(height):
+            for j in range(width):
+                array[i][j] = (3 - array[i][j]) % 3
+        return array
+
+    if color == 2:
+        list_str = _black_color(array)
+
+    class_dict = {("WIN", (), ()): "11111",
+                  ("H4", (0, 5), ()): "011110",
+                  ("C4", (0), (5)): "011112",
+                  ("C4", (5), (0)): "211110",
+                  ("C4", (4), ()): r"^11110",
+                  ("C4", (0), ()): r"01111$",
+                  ("C4", (0, 2, 6), ()): "0101110",
+                  ("C4", (0, 4, 6), ()): "0111010",
+                  ("C4", (0, 3, 6), ()): "0110110",
+                  ("H3", (0, 4), ()): "01110",
+                  ("H3", (0, 2, 5), ()): "010110",
+                  ("H3", (0, 3, 5), ()): "011010",
+                  ("M3", (0, 1), (5)): "001112",
+                  ("M3", (0, 1), ()): r"00111$",
+                  ("M3", (4, 5), (0)): "211100",
+                  ("M3", (4, 5), ()): r"^11100",
+                  ("M3", (0, 2), (5)): "010112",
+                  ("M3", (0, 2), ()): r"01011$",
+                  ("M3", (3, 5), (0)): "211010",
+                  ("M3", (3, 5), ()): r"^11010",
+                  ("M3", (0, 3), (5)): "011012",
+                  ("M3", (0, 3), ()): r"01101$",
+                  ("M3", (2, 5), (0)): "210110",
+                  ("M3", (2, 5), ()): r"^10110",
+                  ("M3", (1, 2), ()): "10011",
+                  ("M3", (2, 3), ()): "11001",
+                  ("M3", (1, 3), ()): "10101",
+                  ("M3", (1, 4), (0, 6)): "2011102",
+                  ("M3", (1, 4), (6)): r"^011102",
+                  ("M3", (1, 4), (0)): r"201110$",
+                  ("H2", (0, 1, 4), ()): "00110",
+                  ("H2", (0, 3, 4), ()): "01100",
+                  ("H2", (0, 2, 4), ()): "01010",
+                  ("H2", (0, 2, 3, 5), ()): "010010",
+                  ("M2", (0, 1, 2), (5)): "000112",
+                  ("M2", (0, 1, 2), ()): r"00011$",
+                  ("M2", (3, 4, 5), (0)): "211000",
+                  ("M2", (3, 4, 5), ()): r"^11000",
+                  ("M2", (0, 1, 3), (5)): "001012",
+                  ("M2", (0, 1, 3), ()): r"00101$",
+                  ("M2", (2, 4, 5), (0)): "210100",
+                  ("M2", (2, 4, 5), ()): r"^10100",
+                  ("M2", (0, 2, 3), (5)): "010012",
+                  ("M2", (0, 2, 3), ()): r"01001$",
+                  ("M2", (2, 3, 5), (0)): "210010",
+                  ("M2", (2, 3, 5), ()): r"^10010",
+                  ("M2", (1, 2, 3), ()): "10001",
+                  ("M2", (1, 3, 5), (0, 6)): "2010102",
+                  ("M2", (1, 3, 5), (0)): r"201010$",
+                  ("M2", (1, 3, 5), (6)): r"^010102",
+                  ("M2", (1, 4, 5), (0, 6)): "2011002",
+                  ("M2", (1, 4, 5), (6)): r"^011002",
+                  ("M2", (1, 4, 5), (0)): r"201100^",
+                  ("M2", (1, 2, 5), (0, 6)): "2001102",
+                  ("M2", (1, 2, 5), (0)): r"200110$",
+                  ("M2", (1, 2, 5), (6)): r"^001102",
+                  ("S4", (), (0, 5)): "211112",
+                  ("S4", (), (0)): r"21111$",
+                  ("S4", (), (5)): r"^11112",
+                  ("S3", (), (0, 4)): "21112",
+                  ("S3", (), (0)): r"2111$",
+                  ("S3", (), (4)): r"^1112",
+                  ("S2", (), (0, 3)): "2112",
+                  ("S2", (), (3)): r"^112",
+                  ("S2", (), (0)): r"211$",
+                  }
+
+    height, width = len(array), len(array[0])
+    class_counter = Counter()
+
+    # scan by row
+    for row_idx, row in enumerate(array):
+        list_str = "".join(map(str, row))
+        for key in class_dict:
+            class_counter[key[0]] += len(re.findall(class_dict[key], list_str))
+
+    # scan by col
+    for col_idx in range(width):
+        col = [a[col_idx] for a in array]
+        list_str = "".join(map(str, col))
+        for key in class_dict:
+            class_counter[key[0]] += len(re.findall(class_dict[key], list_str))
+
+    # scan by diag_1, from TL to BR
+    for dist in range(-width + 1, height):
+        row_ini, col_ini = (0, -dist) if dist < 0 else (dist, 0)
+        diag = [array[i][j] for i in range(
+            row_ini, height) for j in range(col_ini, width) if i - j == dist]
+        list_str = "".join(map(str, diag))
+        for key in class_dict:
+            class_counter[key[0]] += len(re.findall(class_dict[key], list_str))
+
+    # scan by diag_2, from BL to TR
+    for dist in range(0, width + height - 1):
+        row_ini, col_ini = (dist, 0) if dist < height else (
+            height - 1, dist - height + 1)
+        diag = [array[i][j] for i in range(
+            row_ini, -1, -1) for j in range(col_ini, width) if i + j == dist]
+        list_str = "".join(map(str, diag))
+        for key in class_dict:
+            class_counter[key[0]] += len(re.findall(class_dict[key], list_str))
+
+    return class_counter
+
+
+def class_to_score():
+    """
+    define the reward of some specific class of chess
+    :return:
+        score_map: a map from the special class(a string) to score(a real number)
+    """
+    score_map = {"WIN": 100000,
+                 "H4": 10000,
+                 "C4": 100,
+                 "H3": 200,
+                 "M3": 50,
+                 "H2": 5,
+                 "M2": 3,
+                 "S4": -5,
+                 "S3": -5,
+                 "S2": -5
+                 }
+    return score_map
+
+
+def board_evaluation(board):
+    """
+    evaluate the situation of the brain.
+    :param
+        board:
+    :return:
+        score: a real number, indicating how good the condition is
+    """
+    score = 0
+
+    brain_board = extend_board(board=board, player=1)
+    for a_class, num in is_special_class(brain_board, 1).items():
+        score = score + class_to_score()[a_class] * num
+
+    oppo_board = extend_board(board=board, player=2)
+    for a_class, num in is_special_class(oppo_board, 2).items():
+        score = score - class_to_score()[a_class] * num
+
+    return score
+
+
+def isEnd(board):
+    """
+    judge wheher the game has a winner, if we have one, show who he is
+    :param
+        board:
+    :return
+        is_end: a boolean
+        winner: if not exist, return None, else return 1 or 2
+    """
+    num1 = is_special_class(board, 1)["WIN"]
+    num2 = is_special_class(board, 2)["WIN"]
+
+    if num1 == 0 and num2 == 0:
+        return False, None
+    elif num1 > 0:
+        return True, 1
+    else:
+        return True, 2
+# end of RT's code    
+
+
 class brain_MCTS(object):
     """
     AI player.
@@ -218,10 +477,9 @@ class brain_MCTS(object):
             visited_states.add((player, move))
 
             is_full = not len(availables)
-            # win, winner = self.has_a_winner(his_players_copy, his_moves_copy, board_copy)
-            # pp.pipeOut("Player {} wins".format(winner))
-            # if is_full or win:
-                # break
+            win, winner = isEnd(board_copy)
+            if is_full or win:
+                break
 
             # update player
             player = 1 if his_players_copy[-1]==2 else 2
@@ -285,40 +543,40 @@ class brain_MCTS(object):
         return adjacents
     
 
-    def has_a_winner(self, his_players, his_moves, board):
-        """
-        This function is wrong.
-        """
-        import itertools
-        moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]!=0]
-        if (len(moved) < 9):  # 5+4 to win
-            return False, -1
+    # def has_a_winner(self, his_players, his_moves, board):
+    #     """
+    #     This function is wrong.
+    #     """
+    #     import itertools
+    #     moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]!=0]
+    #     if (len(moved) < 9):  # 5+4 to win
+    #         return False, -1
 
-        width = pp.width
-        height = pp.height
+    #     width = pp.width
+    #     height = pp.height
 
-        n = 4   # need how many pieces in a row to win
-        for w, h in moved:
-            m = his_moves.index((w, h))
-            player = his_players[m]
+    #     n = 4   # need how many pieces in a row to win
+    #     for w, h in moved:
+    #         m = his_moves.index((w, h))
+    #         player = his_players[m]
 
-            if (w in range(width - n + 1) and
-                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n))) == 1):
-                return True, player
+    #         if (w in range(width - n + 1) and
+    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n))) == 1):
+    #             return True, player
 
-            if (h in range(height - n + 1) and
-                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n * width, width))) == 1):
-                return True, player
+    #         if (h in range(height - n + 1) and
+    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n * width, width))) == 1):
+    #             return True, player
 
-            if (w in range(width - n + 1) and h in range(height - n + 1) and
-                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width + 1), width + 1))) == 1):
-                return True, player
+    #         if (w in range(width - n + 1) and h in range(height - n + 1) and
+    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width + 1), width + 1))) == 1):
+    #             return True, player
 
-            if (w in range(n - 1, width) and h in range(height - n + 1) and
-                        len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width - 1), width - 1))) == 1):
-                return True, player
+    #         if (w in range(n - 1, width) and h in range(height - n + 1) and
+    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width - 1), width - 1))) == 1):
+    #             return True, player
 
-        return False, -1
+    #     return False, -1
 
         
 def brain_turn():
@@ -326,8 +584,6 @@ def brain_turn():
     Choose your move and call do_mymove(x,y), 0 <= x < width, 0 <= y < height.
     Write your strategies here.
     """
-
-    import itertools
     if pp.terminateAI:     # the game is over
         return
 
