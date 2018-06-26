@@ -408,12 +408,6 @@ class brain_MCTS(object):
         from math import log, sqrt
         import itertools
 
-        # parameter initialize
-        # plays = self.plays
-        # wins = self.wins
-        # plays_rave = self.plays_rave
-        # wins_rave = self.wins_rave
-
         player = 1 if his_players_copy[-1]==2 else 2
         availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board_copy[i][j]==0]
         visited_states = set()
@@ -440,18 +434,18 @@ class brain_MCTS(object):
             # try to add statistics info to all moves quickly
             # adjacents = []
                 if len(availables) > 5:
-                    adjacents = self.adjacent_moves(board_copy, player, self.plays)
+                    adjacents = self.adjacent_moves(board_copy, player, self.plays, his_moves_copy)
 
                 if len(adjacents):
                     # random select one move from adjacents
                     move = choice(adjacents)
                     # pp.pipeOut("Random select one move from adjacents at [{},{}]".format(move[0], move[1]))
-                else:
-                    peripherals = []
-                    for move in availables:
-                        if not self.plays.get((player, move)):
-                            peripherals.append(move)
-                    move = choice(peripherals)
+                # else:
+                #     peripherals = []
+                #     for move in availables:
+                #         if not self.plays.get((player, move)):
+                #             peripherals.append(move)
+                #     move = choice(peripherals)
 
             # add one move to the board
             board_copy[move[0]][move[1]] = player
@@ -506,14 +500,17 @@ class brain_MCTS(object):
         return comb[1]
 
 
-    def adjacent_moves(self, board, player, plays):
+    def adjacent_moves(self, board, player, plays, his_moves):
         """
         Adjacent moves without statistics info
         This function is right!
         """
         import itertools
-        availables = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
-        moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]!=0]
+        # ava = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==0]
+        moved = his_moves
+        # moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]==player]
+        # pp.pipeOut("moved {}".format(moved))
+
         adjacents = set()
         width = pp.width
         height = pp.height
@@ -542,42 +539,6 @@ class brain_MCTS(object):
                 adjacents.remove(move)
         return adjacents
     
-
-    # def has_a_winner(self, his_players, his_moves, board):
-    #     """
-    #     This function is wrong.
-    #     """
-    #     import itertools
-    #     moved = [(i, j) for i, j in itertools.product(range(pp.width), range(pp.height)) if board[i][j]!=0]
-    #     if (len(moved) < 9):  # 5+4 to win
-    #         return False, -1
-
-    #     width = pp.width
-    #     height = pp.height
-
-    #     n = 4   # need how many pieces in a row to win
-    #     for w, h in moved:
-    #         m = his_moves.index((w, h))
-    #         player = his_players[m]
-
-    #         if (w in range(width - n + 1) and
-    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n))) == 1):
-    #             return True, player
-
-    #         if (h in range(height - n + 1) and
-    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n * width, width))) == 1):
-    #             return True, player
-
-    #         if (w in range(width - n + 1) and h in range(height - n + 1) and
-    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width + 1), width + 1))) == 1):
-    #             return True, player
-
-    #         if (w in range(n - 1, width) and h in range(height - n + 1) and
-    #                     len(set(his_players[his_moves.index(i)] for i in range(m, m + n * (width - 1), width - 1))) == 1):
-    #             return True, player
-
-    #     return False, -1
-
         
 def brain_turn():
     """
@@ -591,30 +552,9 @@ def brain_turn():
         pp.do_mymove(int(pp.width//2), int(pp.height//2))
 
     # use MCTS to find a move
-    AI = brain_MCTS(time=pp.info_timeout_turn, max_actions=100)
+    AI = brain_MCTS(time=pp.info_timeout_turn, max_actions=50000)
     action = AI.get_action()
     pp.do_mymove(*action)
-
-
-def brain_random():
-    """
-    Randomly take a move.
-    For Gomoku game, MCTS starts with a chess board and walk chess randomly until the end.
-    """
-    if pp.terminateAI:
-        return
-    i = 0
-    while True:
-        x = random.randint(0, pp.width)
-        y = random.randint(0, pp.height)
-        i += 1
-        if pp.terminateAI:
-            return
-        if isFree(x,y):
-            break
-    if i > 1:
-        pp.pipeOut("DEBUG {} coordinates didn't hit an empty field".format(i))
-    pp.do_mymove(x, y)
 
 
 def brain_end():
