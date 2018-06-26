@@ -5,7 +5,7 @@ from players import computer
 
 __author__ = "Jan Stránský (https://github.com/stranskyjan/pbrain-pyrandom), Modified for AlphaGomoku"
 
-pp.infotext = 'name="AI-template", author="Shihan Ran", version="1.0", country="China"'
+pp.infotext = 'name="AI-Gomoku", author="Shihan Ran", version="1.0", country="China"'
 
 
 MAX_BOARD = 100

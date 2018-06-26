@@ -1,0 +1,29 @@
+Format of the board:
+
+Title ("Piskvorky" - hard coded. Never changes.) BoardWidth x BoardHeight, 
+Player1 Difficulty:Player2 Difficulty, Starting Player
+Row Coordinate, Column Coordinate, time taken to make move (ms)
+Name of Player 1
+Name of Player 2
+Error Code
+
+I was able to work this information out by using the source code available from 
+Piskvorky on SVN at https://svn.code.sf.net/p/piskvork/code/trunk/
+Specifically, https://svn.code.sf.net/p/piskvork/code/trunk/source/game.cpp
+
+The main methods of interest for working this information out were openPsq() and 
+savePsq(), along with the methods that these themselves call.
+
+- Width and Height refer to the board and seem to be set in openPsq()
+- Difficulty refers to the AI's "level", which determines the skill at which it
+plays. See level() method.
+- Starting Player. At a glance, can't see how this is determined.
+- Coordinates are self explanatory
+- Time taken for move
+- Player names, written in wrNames()
+- Error code: savePsq() is called when a game finishes. The third parameter,
+errCode, is what is written as the final line in the training data. For
+a standard finish, this is passed in as 0. Our training data files have -1
+written as the error code, although I haven't had a chance to look in to this
+yet.
+
