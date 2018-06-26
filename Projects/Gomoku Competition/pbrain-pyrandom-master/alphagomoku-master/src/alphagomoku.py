@@ -1,6 +1,7 @@
 import pisqpipe as pp
 from pisqpipe import DEBUG_EVAL
 
+
 # ================================ start of player ================================  
 """
 The player is represented by an int.
@@ -46,6 +47,8 @@ from copy import deepcopy
 from math import ceil
 from sys import stdout
 from typing import List, Tuple
+
+# from players import player
 
 """
 A row consists of a list of players.
@@ -107,7 +110,7 @@ class Board:
 		for y in reversed(coords):
 			for x in coords:
 				coord = self._board[x][y]
-				stdout.write(player.convert_player_char(coord))
+				stdout.write(convert_player_char(coord))
 			print()
 		print()
 
@@ -164,7 +167,7 @@ class Board:
 			* The next_player isn't being updated correctly. 
 			* Somewhere the move method is being called with an incorrect player
 		'''
-		if not (player.is_valid(p) and p == self._next_player):
+		if not (is_valid(p) and p == self._next_player):
 			return False
 
 		self._next_player = -p
@@ -407,11 +410,11 @@ def get_test_data(file_count: int = None):
 	return _load_or_parse_data(_TEST_DATA_FILES, _TESTING_DATA_SAVE_PATH, file_count)
 
 
-if __name__ == '__main__':
-	if len(argv) > 1:
-		process_training_data(argv[1:], should_print=True)
-	else:
-		process_training_data(_TRAINING_DATA_FILES, should_print=True)
+# if __name__ == '__main__':
+# 	if len(argv) > 1:
+# 		process_training_data(argv[1:], should_print=True)
+# 	else:
+# 		process_training_data(_TRAINING_DATA_FILES, should_print=True)
 
 
 # ================================ start of neural_network ================================  
@@ -532,7 +535,7 @@ def convert_training_to_batch(training_data, number_of_batches):
 	if number_of_batches == 1:
 		return [train_input], [train_output], [heuristics]
 	else:
-		return split_list_into_n_lists(train_input, number_of_batches), split_list_into_n_lists(train_output, number_of_batches), split_list_into_n_lists(
+		return nn_split_list_into_n_lists(train_input, number_of_batches), nn_split_list_into_n_lists(train_output, number_of_batches), nn_split_list_into_n_lists(
 			heuristics, number_of_batches)
 
 
@@ -544,7 +547,7 @@ def shuffle_lists_together(train_input, train_output, heuristics):
 	return train_input, train_output, heuristics
 
 
-def split_list_into_n_lists(list, n):
+def nn_split_list_into_n_lists(list, n):
 	return [list[i::n] for i in range(n)]
 
 
@@ -935,7 +938,7 @@ def get_failed_predictions():
 		winner_of_game = game[0][1]
 		for move in game:
 			print(move[0])
-			winner_from_network = use_network(move[0], training_input, heuristic, keep_prob, tf_output, sess)
+			winner_from_network = use_network(move[0], training_input, heuristic, keep_prob, tf_output, sess, winner_of_game)  # , winner_of_game
 			if winner_from_network != winner_of_game:
 				failed_predictions.append(move)
 	print("Failed Predictions:")
@@ -966,8 +969,8 @@ def use_network(input, training_input, heuristic, keep_prob, tf_output, sess, pl
 	return output[int((player + 1)/2)]
 
 
-if __name__ == '__main__':
-	get_failed_predictions()
+# if __name__ == '__main__':
+# 	get_failed_predictions()
 
 
 # ================================ start of monte_carlo ================================  
@@ -1246,7 +1249,7 @@ class Computer:
 
 	def create_node(self, brd: Board, move: MoveStruct = (None, None)):
 		board = deepcopy(brd)
-		self.node = mc.Node(move, board, self.neural_network, self.player_int)
+		self.node = Node(move, board, self.neural_network, self.player_int)
 
 	def set_player_number_for_computer(self, board: Board):
 		if board.get_last_move() is None:
@@ -1272,7 +1275,7 @@ pp.infotext = 'name="AI-Gomoku", author="Shihan Ran", version="1.0", country="Ch
 MAX_BOARD = 100
 board = Board()
 
-COMPUTER = computer.Computer()
+COMPUTER = Computer()
 
 
 def brain_init():
@@ -1288,7 +1291,7 @@ def brain_init():
 def brain_restart():
 	global board, COMPUTER
 	board = Board()
-	COMPUTER = computer.Computer()
+	COMPUTER = Computer()
 	pp.pipeOut("OK")
 
 
