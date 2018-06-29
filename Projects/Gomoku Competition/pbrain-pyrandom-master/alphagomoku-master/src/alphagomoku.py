@@ -996,10 +996,8 @@ class Neural_Network:
 
 	'''
 		This resets the tensorflow graph and keeps it running at 0.01 seconds per use.
-
 		If this isn't called after at least every 200 calls the time per use for the nn will increase with each call.
 	'''
-
 	def clear_garbage_from_nn(self):
 		reset_default_graph()
 		self.training_input, self.heuristic, self.keep_prob, self.tf_output, self.sess = setup_network()
@@ -1021,7 +1019,6 @@ class Node:
 	"""
 	Represents a move that can be made, how good that move is, and what moves can be made after it.
 	"""
-
 	def __init__(self, move: MoveStruct, board: Board, neural_network: Neural_Network, player_for_computer: int):
 		global nodes_created
 		nodes_created += 1
@@ -1214,10 +1211,10 @@ from copy import deepcopy
 # from treesearch.monte_carlo import Neural_Network
 
 # Change to True to produce heatmap PDFs
-GEN_GRAPH = False
+# GEN_GRAPH = False
 
-if GEN_GRAPH:
-	from graph_main import use_graph_gen
+# if GEN_GRAPH:
+# 	from graph_main import use_graph_gen
 
 class Computer:
 	def __init__(self):
@@ -1236,8 +1233,8 @@ class Computer:
 			if not node_found:
 				self.create_node(brd, last_move)
 
-		if GEN_GRAPH:
-			use_graph_gen(self.node._board, self.neural_network)
+		# if GEN_GRAPH:
+		# 	use_graph_gen(self.node._board, self.neural_network)
 
 		self.node = self.node.get_play()
 		x, y = self.node.get_move()

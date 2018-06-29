@@ -94,7 +94,7 @@ Command line parameters
     Asociation - opens a psq file.
  -p <ai1> <ai2>
     Run match ai1 against ai2
- -tmppsq
+ -temps.
     Generate psq files continuously into tmp subfolder. It is suitable for online tournament broadcast.
  -a <mask>
     Set CPU affinity. If there are 2 piskvork on a computer with dualcore procesor, it is suitable to execute the first piskvork.exe -a 1 and the second  piskvork.exe -a 2. There can be no CPU concurrency then. 
