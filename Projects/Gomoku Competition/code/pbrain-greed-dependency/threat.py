@@ -42,25 +42,30 @@ class Threats(object):
         if not OUTPUT: self.color = 1
         height, width = len(array), len(array[0])
 
-        if self.turn == 0:
-            pos = [(i, j) for i in range(height) for j in range(width)]
-            counter = 0
-            pp = None
-            for p in pos:
-                if array[p[0]][p[1]] == self._opp_color(self.color):
-                    counter += 1
-                    pp = p
-            if counter <= 1: 
-                if pp is not None:
-                    a = [1, 0, -1]
+        if OUTPUT: print("first")
+        pos = [(i, j) for i in range(height) for j in range(width)]
+        counter_opp = 0
+        counter = 0
+        pp = None
+        self.history = []
+        for p in pos:
+            if array[p[0]][p[1]] == self._opp_color(self.color):
+                counter_opp += 1
+                pp = p
+            elif array[p[0]][p[1]] == self.color:
+                self.history.append(p)
+                counter += 1
+        if counter_opp <= 1 and counter == 0: 
+            if pp is not None:
+                a = [1, 0, -1]
+                t1 = a[random.randint(0,2)]
+                t2 = a[random.randint(0,2)]
+                while t1 == 0 and t1 == 0:
                     t1 = a[random.randint(0,2)]
                     t2 = a[random.randint(0,2)]
-                    while t1 == 0 and t1 == 0:
-                        t1 = a[random.randint(0,2)]
-                        t2 = a[random.randint(0,2)]
-                    return (min(height-1, max(0, pp[0] + t1)), min(width-1,max(0, pp[1] + t2)))
-                else:
-                    return (height//2, width//2)
+                return (min(height-1, max(0, pp[0] + t1)), min(width-1,max(0, pp[1] + t2)))
+            else:
+                return (height//2, width//2)
 
         if OUTPUT: print("my victory")
         victory = self.detect_now(array, self.color, shape.threats_dict[0])
@@ -73,7 +78,12 @@ class Threats(object):
             if len(threat) > 1:
                 t0 = self.point_evaluation(self._add_point(array, threat[0][0], threat[0][1], self.color), threat[0], self.color, class_dict=shape.class_dict) 
                 t1 = self.point_evaluation(self._add_point(array, threat[1][0], threat[1][1], self.color), threat[1], self.color, class_dict=shape.class_dict)
-                return threat[0] if  t0 > t1 else threat[1] 
+                res =  threat[0] if  t0 > t1 else threat[1] 
+                t = max(t0, t1)
+                if len(threat) == 3:
+                    t3 = self.point_evaluation(self._add_point(array, threat[2][0], threat[2][1], self.color), threat[2], self.color, class_dict=shape.class_dict)
+                    res = res if t > t3 else threat[2]
+                return res
             else:
                 return threat[0]
 
@@ -88,7 +98,12 @@ class Threats(object):
             if len(threat) > 1:
                 t0 = self.point_evaluation(self._add_point(array, threat[0][0], threat[0][1], self.color), threat[0], self.color, class_dict=shape.class_dict) 
                 t1 = self.point_evaluation(self._add_point(array, threat[1][0], threat[1][1], self.color), threat[1], self.color, class_dict=shape.class_dict)
-                return threat[0] if  t0 > t1 else threat[1] 
+                res =  threat[0] if  t0 > t1 else threat[1] 
+                t = max(t0, t1)
+                if len(threat) == 3:
+                    t3 = self.point_evaluation(self._add_point(array, threat[2][0], threat[2][1], self.color), threat[2], self.color, class_dict=shape.class_dict)
+                    res = res if t > t3 else threat[2]
+                return res
             else:
                 return threat[0]
 
@@ -206,24 +221,35 @@ class Threats(object):
 
         return ()
 
-
     def greedy_search(self, array, color, class_dict):
         height, width = len(array), len(array[0])
-        pos = [(i, j) for i in range(height) for j in range(width)]
         choices = {}
+        pos = []
+        # local
+        for p in self.history:
+            pos.extend([(p[0]+a[0], p[1]+a[1]) for a in [(1,1),(0,1),(-1,1),(1,0),(-1,0),(-1,1),(-1,0),(-1,-1)]])
+        for p in pos:
+            if p[0] >= 0 and p[0] <= height and p[1] >= 0 and p[1] <= width and array[p[0]][p[1]] == 0:
+                t1 = self.point_evaluation(self._add_point(array, p[0], p[1], self.color), p, self.color, class_dict=shape.class_dict) - self.point_evaluation(self._add_point(array, p[0], p[1], self.color), p, self._opp_color(self.color), class_dict=shape.class_dict) 
+                if t1 in choices:
+                    choices[t1].append(p)
+                else:
+                    choices[t1] = [p]
+        if len(choices):
+            idx = max(list(choices))
+            return choices[idx][random.randint(0, len(choices[idx])-1)]
+
+        # global
+        pos = [(i, j) for i in range(height) for j in range(width)]
         for p in pos:
             if array[p[0]][p[1]] == 0:
-                t1 = self.point_evaluation(self._add_point(array, p[0], p[1], self.color), p, self.color, class_dict=shape.class_dict) 
-                t2 = self.point_evaluation(array, p, self.color, class_dict=shape.class_dict) 
-                t = t1 - t2
-                if t in choices:
-                    choices[t].append(p)
+                t1 = self.point_evaluation(self._add_point(array, p[0], p[1], self.color), p, self.color, class_dict=shape.class_dict) - self.point_evaluation(self._add_point(array, p[0], p[1], self.color), p, self._opp_color(self.color), class_dict=shape.class_dict) 
+                if t1 in choices:
+                    choices[t1].append(p)
                 else:
-                    choices[t] = [p]
+                    choices[t1] = [p]
         idx = max(list(choices))
         return choices[idx][random.randint(0, len(choices[idx])-1)]
-
-
 
     def detect_now(self, array, color, class_dict):
         # if color == 2:
@@ -245,7 +271,6 @@ class Threats(object):
                 return temp[0][2]
 
         return ()
-
 
     def detect_threat(self, array):
         """
@@ -274,7 +299,6 @@ class Threats(object):
             self.threat_set_opp_now, threat_set_opp)
 
         self.seq = self._shape_seq(threat_set_opp, self.threat_set_opp_now)
-
 
     def _debug_output(self, threat_set):
         print("============")
@@ -557,7 +581,7 @@ if __name__ == "__main__":
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
